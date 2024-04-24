@@ -1,0 +1,90 @@
+[gd_scene load_steps=8 format=3 uid="uid://cwcy10siqhc2y"]
+
+[ext_resource type="Theme" uid="uid://fb64r7sbqq14" path="res://UI/UIResources/Style/GameTheme.tres" id="1_xf3tn"]
+[ext_resource type="Script" path="res://UI/Scripts/GameUI.gd" id="2_2k75m"]
+[ext_resource type="Script" path="res://UI/Scripts/HealthUI.gd" id="3_1byg2"]
+[ext_resource type="Script" path="res://UI/Scripts/ScoreUI.gd" id="4_ru4lt"]
+[ext_resource type="Texture2D" uid="uid://b2bq2x16x1vw3" path="res://UI/UIResources/AtlasCutoffs/MenuIcon.tres" id="5_d5ol4"]
+
+[sub_resource type="InputEventKey" id="InputEventKey_b3i0q"]
+device = -1
+keycode = 4194305
+
+[sub_resource type="Shortcut" id="Shortcut_54omh"]
+events = [SubResource("InputEventKey_b3i0q")]
+
+[node name="GameUI" type="Control"]
+process_mode = 1
+z_index = 1
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 1
+theme = ExtResource("1_xf3tn")
+script = ExtResource("2_2k75m")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 79.0
+offset_top = -143.0
+offset_right = -79.0
+offset_bottom = -57.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/separation = 526
+alignment = 1
+
+[node name="HealthUI" type="HBoxContainer" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+script = ExtResource("3_1byg2")
+
+[node name="ScoreUI" type="VBoxContainer" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+theme_override_constants/separation = 16
+alignment = 1
+script = ExtResource("4_ru4lt")
+
+[node name="RichTextLabel" type="RichTextLabel" parent="HBoxContainer/ScoreUI"]
+clip_contents = false
+layout_mode = 2
+bbcode_enabled = true
+text = "[center]scoreText"
+fit_content = true
+scroll_active = false
+shortcut_keys_enabled = false
+
+[node name="RichTextLabel2" type="RichTextLabel" parent="HBoxContainer/ScoreUI"]
+clip_contents = false
+layout_mode = 2
+bbcode_enabled = true
+text = "[center]diffText"
+fit_content = true
+scroll_active = false
+shortcut_keys_enabled = false
+
+[node name="AspectRatioContainer" type="AspectRatioContainer" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment_horizontal = 2
+
+[node name="MenuButton" type="Button" parent="HBoxContainer/AspectRatioContainer"]
+layout_mode = 2
+shortcut = SubResource("Shortcut_54omh")
+icon = ExtResource("5_d5ol4")
+icon_alignment = 1
+expand_icon = true
+
+[connection signal="update_difficulty" from="HBoxContainer/ScoreUI" to="HBoxContainer/ScoreUI" method="_on_update_difficulty"]
+[connection signal="update_score" from="HBoxContainer/ScoreUI" to="HBoxContainer/ScoreUI" method="_on_update_score"]

@@ -1,0 +1,11 @@
+[gd_resource type="StyleBoxTexture" load_steps=2 format=3 uid="uid://diw62uhfys07j"]
+
+[ext_resource type="Texture2D" uid="uid://b8rneylux7gc1" path="res://UI/UIResources/AtlasCutoffs/VSliderSelected.tres" id="1_ih6lv"]
+
+[resource]
+texture = ExtResource("1_ih6lv")
+texture_margin_left = 12.0
+texture_margin_top = 16.0
+texture_margin_right = 12.0
+texture_margin_bottom = 16.0
+expand_margin_top = 12.0

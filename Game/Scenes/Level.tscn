@@ -1,0 +1,21 @@
+[gd_scene load_steps=4 format=3 uid="uid://b2aqk4udtsuke"]
+
+[ext_resource type="Script" path="res://Game/Scripts/LevelController.gd" id="1_r2ko0"]
+[ext_resource type="Script" path="res://Game/Scripts/GridHelper.gd" id="2_u5ev4"]
+
+[sub_resource type="Resource" id="Resource_3x501"]
+script = ExtResource("2_u5ev4")
+offset = Vector2(128, 256)
+cellScale = 1.0
+defaultResolution = Vector2(128, 128)
+
+[node name="Level" type="Node2D"]
+process_mode = 1
+script = ExtResource("1_r2ko0")
+gridHelper = SubResource("Resource_3x501")
+
+[node name="Iterator" type="Timer" parent="."]
+wait_time = 10.0
+autostart = true
+
+[connection signal="timeout" from="Iterator" to="." method="_on_iterator_timeout"]

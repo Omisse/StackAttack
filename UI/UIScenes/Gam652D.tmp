@@ -1,0 +1,61 @@
+[gd_scene load_steps=4 format=3 uid="uid://cwcy10siqhc2y"]
+
+[ext_resource type="Script" path="res://UI/Scripts/HealthUI.gd" id="1_4hsvh"]
+[ext_resource type="Script" path="res://UI/Scripts/GameUI.gd" id="1_qweam"]
+[ext_resource type="Script" path="res://UI/Scripts/ScoreUI.gd" id="5_wp3b6"]
+
+[node name="GameUI" type="Control"]
+top_level = true
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_qweam")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -372.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="HealthUI" type="HBoxContainer" parent="HBoxContainer"]
+auto_translate_mode = 1
+layout_mode = 2
+size_flags_horizontal = 7
+script = ExtResource("1_4hsvh")
+
+[node name="ScoreUI" type="VBoxContainer" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+mouse_filter = 2
+script = ExtResource("5_wp3b6")
+
+[node name="RichTextLabel" type="RichTextLabel" parent="HBoxContainer/ScoreUI"]
+clip_contents = false
+layout_mode = 2
+size_flags_horizontal = 5
+bbcode_enabled = true
+text = "[center]scoreText"
+fit_content = true
+scroll_active = false
+shortcut_keys_enabled = false
+
+[node name="RichTextLabel2" type="RichTextLabel" parent="HBoxContainer/ScoreUI"]
+layout_mode = 2
+size_flags_horizontal = 5
+size_flags_vertical = 3
+bbcode_enabled = true
+text = "[center]diffText"
+fit_content = true
+scroll_active = false
+shortcut_keys_enabled = false
+
+[connection signal="update_difficulty" from="HBoxContainer/ScoreUI" to="HBoxContainer/ScoreUI" method="_on_update_difficulty"]
+[connection signal="update_score" from="HBoxContainer/ScoreUI" to="HBoxContainer/ScoreUI" method="_on_update_score"]

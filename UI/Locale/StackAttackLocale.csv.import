@@ -1,0 +1,17 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://ckh2pgmurinsq"
+
+[deps]
+
+files=["res://UI/Locale/StackAttackLocale.en.translation", "res://UI/Locale/StackAttackLocale.ru.translation"]
+
+source_file="res://UI/Locale/StackAttackLocale.csv"
+dest_files=["res://UI/Locale/StackAttackLocale.en.translation", "res://UI/Locale/StackAttackLocale.ru.translation"]
+
+[params]
+
+compress=true
+delimiter=0

@@ -1,0 +1,12 @@
+[gd_resource type="StyleBoxTexture" load_steps=2 format=3 uid="uid://cwmu20kj6bvfn"]
+
+[ext_resource type="Texture2D" uid="uid://cemnl1wm4dpsv" path="res://UI/UIResources/AtlasCutoffs/MenuBG.tres" id="1_lnc5q"]
+
+[resource]
+texture = ExtResource("1_lnc5q")
+texture_margin_left = 120.0
+texture_margin_top = 120.282
+texture_margin_right = 120.0
+texture_margin_bottom = 120.079
+region_rect = Rect2(0, 0, 402, 380)
+modulate_color = Color(1, 1, 1, 0.521569)

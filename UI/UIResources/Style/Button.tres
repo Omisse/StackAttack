@@ -1,0 +1,10 @@
+[gd_resource type="StyleBoxTexture" load_steps=2 format=3 uid="uid://du2idrgpko6gb"]
+
+[ext_resource type="Texture2D" uid="uid://dfkb7vn6e67qu" path="res://UI/UIResources/AtlasCutoffs/Button.tres" id="1_3fa3f"]
+
+[resource]
+texture = ExtResource("1_3fa3f")
+texture_margin_left = 10.0
+texture_margin_top = 16.0
+texture_margin_right = 10.0
+texture_margin_bottom = 16.0

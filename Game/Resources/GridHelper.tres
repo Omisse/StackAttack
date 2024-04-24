@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="GridHelper" load_steps=2 format=3 uid="uid://dpbycau1ckiwp"]
+
+[ext_resource type="Script" path="res://Game/Scripts/GridHelper.gd" id="1_8cm3n"]
+
+[resource]
+script = ExtResource("1_8cm3n")
+offset = Vector2(128, 256)
+cellScale = 1.0
+defaultResolution = Vector2(128, 128)

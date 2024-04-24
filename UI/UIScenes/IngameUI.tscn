@@ -1,0 +1,21 @@
+[gd_scene load_steps=3 format=3 uid="uid://iyeaotuvvslb"]
+
+[ext_resource type="PackedScene" uid="uid://cwcy10siqhc2y" path="res://UI/UIScenes/PlayerUI.tscn" id="1_7lv2m"]
+[ext_resource type="PackedScene" uid="uid://dtq8gtoh83dmg" path="res://UI/UIScenes/PauseMenu.tscn" id="2_hmjpf"]
+
+[node name="Control" type="Control"]
+process_mode = 3
+top_level = true
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PauseMenu" parent="." instance=ExtResource("2_hmjpf")]
+layout_mode = 1
+
+[node name="GameUI" parent="." node_paths=PackedStringArray("pauseMenu") instance=ExtResource("1_7lv2m")]
+layout_mode = 1
+pauseMenu = NodePath("../PauseMenu")

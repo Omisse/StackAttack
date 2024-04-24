@@ -1,0 +1,130 @@
+[gd_scene load_steps=9 format=3 uid="uid://dtq8gtoh83dmg"]
+
+[ext_resource type="Script" path="res://UI/Scripts/PauseMenu.gd" id="2_2xmx7"]
+[ext_resource type="FontFile" uid="uid://drpfmf3jbf58w" path="res://UI/Fonts/TrueType (.ttf)/PixeloidSans-Bold.ttf" id="2_xict8"]
+[ext_resource type="Texture2D" uid="uid://ln60073j7hxs" path="res://UI/UIResources/AtlasCutoffs/SoundTexture.tres" id="3_0ge1o"]
+[ext_resource type="Theme" uid="uid://fb64r7sbqq14" path="res://UI/UIResources/Style/GameTheme.tres" id="3_q34cj"]
+[ext_resource type="Texture2D" uid="uid://c888lpil38jmr" path="res://UI/UIResources/AtlasCutoffs/SoundOFFTexture.tres" id="4_70i6t"]
+[ext_resource type="Texture2D" uid="uid://1hrkh4golxww" path="res://UI/UIResources/AtlasCutoffs/RuFlagIcon.tres" id="4_ljk01"]
+
+[sub_resource type="InputEventKey" id="InputEventKey_u70i8"]
+device = -1
+keycode = 4194305
+
+[sub_resource type="Shortcut" id="Shortcut_wq6dp"]
+events = [SubResource("InputEventKey_u70i8")]
+
+[node name="PauseMenu" type="Control"]
+process_mode = 3
+process_priority = -5
+top_level = true
+z_index = 5
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+mouse_filter = 1
+theme = ExtResource("3_q34cj")
+script = ExtResource("2_2xmx7")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -337.0
+offset_top = -303.0
+offset_right = 337.0
+offset_bottom = 303.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="BackgroundPanel" type="Panel" parent="MarginContainer"]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 128
+theme_override_constants/margin_top = 64
+theme_override_constants/margin_right = 128
+theme_override_constants/margin_bottom = 64
+
+[node name="MenuLayoutContainer" type="VBoxContainer" parent="MarginContainer/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Paused" type="Label" parent="MarginContainer/MarginContainer/MenuLayoutContainer"]
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 6
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 16
+theme_override_fonts/font = ExtResource("2_xict8")
+theme_override_font_sizes/font_size = 48
+text = "PAUSED"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ResumeButton" type="Button" parent="MarginContainer/MarginContainer/MenuLayoutContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+shortcut = SubResource("Shortcut_wq6dp")
+text = "RESUME"
+clip_text = true
+
+[node name="RestartButton" type="Button" parent="MarginContainer/MarginContainer/MenuLayoutContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "RESTART"
+language = "ru"
+
+[node name="ExitButton" type="Button" parent="MarginContainer/MarginContainer/MenuLayoutContainer"]
+auto_translate_mode = 1
+layout_mode = 2
+size_flags_vertical = 3
+text = "EXIT"
+clip_text = true
+
+[node name="SettingsContainer" type="HBoxContainer" parent="MarginContainer/MarginContainer/MenuLayoutContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_constants/separation = 32
+
+[node name="LanguageButton" type="Button" parent="MarginContainer/MarginContainer/MenuLayoutContainer/SettingsContainer"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+theme_override_font_sizes/font_size = 26
+icon = ExtResource("4_ljk01")
+clip_text = true
+icon_alignment = 1
+expand_icon = true
+
+[node name="SoundContainer" type="HBoxContainer" parent="MarginContainer/MarginContainer/MenuLayoutContainer/SettingsContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 4
+
+[node name="MuteButton" type="TextureButton" parent="MarginContainer/MarginContainer/MenuLayoutContainer/SettingsContainer/SoundContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+toggle_mode = true
+button_pressed = true
+texture_normal = ExtResource("4_70i6t")
+texture_pressed = ExtResource("3_0ge1o")
+
+[node name="Volume" type="HSlider" parent="MarginContainer/MarginContainer/MenuLayoutContainer/SettingsContainer/SoundContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+max_value = 2.0
+step = 0.05
+value = 1.0

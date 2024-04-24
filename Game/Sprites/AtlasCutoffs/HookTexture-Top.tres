@@ -1,0 +1,7 @@
+[gd_resource type="AtlasTexture" load_steps=2 format=3 uid="uid://b314m5cq8jdnv"]
+
+[ext_resource type="Texture2D" uid="uid://d1eaeiokexlb" path="res://Game/Sprites/TileMap.png" id="1_v50sv"]
+
+[resource]
+atlas = ExtResource("1_v50sv")
+region = Rect2(472, 0, 32, 128)

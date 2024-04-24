@@ -1,0 +1,126 @@
+[gd_scene load_steps=10 format=3 uid="uid://cjs8ckp8vtesj"]
+
+[ext_resource type="Script" path="res://Game/Scripts/Player.gd" id="1_100w0"]
+[ext_resource type="Texture2D" uid="uid://cpay4m34bd1vc" path="res://Game/Sprites/engineer-animation.png" id="2_t1bqe"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_3o1wj"]
+radius = 32.0
+height = 108.0
+
+[sub_resource type="Animation" id="Animation_wcmdh"]
+resource_name = "Fall"
+length = 0.5
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("PlayerSprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [19, 19]
+}
+
+[sub_resource type="Animation" id="Animation_xbee1"]
+resource_name = "Idle"
+length = 0.9
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("PlayerSprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 0, 1, 2, 3, 4, 5, 6, 7]
+}
+
+[sub_resource type="Animation" id="Animation_xly8c"]
+resource_name = "Jump"
+length = 0.5
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("PlayerSprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [18, 18]
+}
+
+[sub_resource type="Animation" id="Animation_ng0g3"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("PlayerSprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="Animation" id="Animation_gepbg"]
+resource_name = "Run"
+length = 0.8
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("PlayerSprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [9, 10, 11, 12, 13, 14, 15, 16]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_26c4b"]
+_data = {
+"Fall": SubResource("Animation_wcmdh"),
+"Idle": SubResource("Animation_xbee1"),
+"Jump": SubResource("Animation_xly8c"),
+"RESET": SubResource("Animation_ng0g3"),
+"Run": SubResource("Animation_gepbg")
+}
+
+[node name="Player" type="CharacterBody2D"]
+script = ExtResource("1_100w0")
+jumpVelocity = -600.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CapsuleShape2D_3o1wj")
+
+[node name="PlayerSprite" type="Sprite2D" parent="."]
+position = Vector2(0, -10)
+texture = ExtResource("2_t1bqe")
+hframes = 9
+vframes = 3
+region_rect = Rect2(0, 0, 656, 380)
+
+[node name="CollisionArea" type="Area2D" parent="."]
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CollisionArea"]
+scale = Vector2(1.05, 1.05)
+shape = SubResource("CapsuleShape2D_3o1wj")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_26c4b")
+}

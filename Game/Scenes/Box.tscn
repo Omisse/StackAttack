@@ -1,0 +1,71 @@
+[gd_scene load_steps=8 format=3 uid="uid://dy7dumn0buc1n"]
+
+[ext_resource type="Script" path="res://Game/Scripts/Box.gd" id="1_e1q2b"]
+[ext_resource type="Texture2D" uid="uid://bncypygmid46" path="res://Game/Sprites/AtlasCutoffs/BoxTexture.tres" id="1_frmww"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_uiup7"]
+size = Vector2(127, 127)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_siqfw"]
+size = Vector2(128, 128)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ag54g"]
+size = Vector2(127, 120)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ywi88"]
+size = Vector2(127, 3)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ooi2i"]
+size = Vector2(127, 2)
+
+[node name="Box" type="StaticBody2D"]
+script = ExtResource("1_e1q2b")
+fallSpeed = 300.0
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_frmww")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_uiup7")
+
+[node name="OwnArea" type="Area2D" parent="."]
+monitoring = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="OwnArea"]
+shape = SubResource("RectangleShape2D_siqfw")
+
+[node name="LeftBoxArea" type="Area2D" parent="."]
+collision_layer = 2
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="LeftBoxArea"]
+position = Vector2(-128, -4)
+shape = SubResource("RectangleShape2D_ag54g")
+
+[node name="RightBoxArea" type="Area2D" parent="."]
+collision_layer = 2
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RightBoxArea"]
+position = Vector2(128, -4)
+shape = SubResource("RectangleShape2D_ag54g")
+
+[node name="TopBoxArea" type="Area2D" parent="."]
+collision_layer = 2
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TopBoxArea"]
+position = Vector2(0, -66.5)
+shape = SubResource("RectangleShape2D_ywi88")
+
+[node name="DownBoxArea" type="Area2D" parent="."]
+collision_layer = 2
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DownBoxArea"]
+position = Vector2(0, 66)
+shape = SubResource("RectangleShape2D_ooi2i")
+
+[connection signal="start_move" from="." to="." method="_on_start_move"]
+[connection signal="area_entered" from="DownBoxArea" to="." method="_on_down_box_area_area_entered"]
+[connection signal="area_exited" from="DownBoxArea" to="." method="_on_down_box_area_area_exited"]

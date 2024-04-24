@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3 uid="uid://bq2vuer8t0y6w"]
+
+[ext_resource type="Texture2D" uid="uid://bncypygmid46" path="res://Game/Sprites/AtlasCutoffs/BoxTexture.tres" id="1_7gcod"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_8qytv"]
+size = Vector2(128, 128)
+
+[node name="TestBox" type="StaticBody2D"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+z_index = 1
+shape = SubResource("RectangleShape2D_8qytv")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_7gcod")
