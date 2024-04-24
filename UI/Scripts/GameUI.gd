@@ -8,9 +8,9 @@ signal scoreChanged(score: int, multiplier: float)
 @export var levelController: LevelController
 @export var pauseMenu: PauseUI
 
-@onready var healthNode: HealthUI = $HBoxContainer/HealthUI
-@onready var scoreNode: ScoreUI = $HBoxContainer/ScoreUI
-@onready var pauseButton: Button = $HBoxContainer/AspectRatioContainer/MenuButton
+@onready var healthNode: HealthUI = %HealthUI
+@onready var scoreNode: ScoreUI = %ScoreUI
+@onready var pauseButton: Button = %MenuButton
 
 
 func _ready() -> void:

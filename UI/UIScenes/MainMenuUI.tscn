@@ -1,10 +1,11 @@
-[gd_scene load_steps=7 format=3 uid="uid://blgolxaiwm52n"]
+[gd_scene load_steps=8 format=3 uid="uid://blgolxaiwm52n"]
 
 [ext_resource type="FontFile" uid="uid://drpfmf3jbf58w" path="res://UI/Fonts/TrueType (.ttf)/PixeloidSans-Bold.ttf" id="1_i8ji6"]
 [ext_resource type="Theme" uid="uid://fb64r7sbqq14" path="res://UI/UIResources/Style/GameTheme.tres" id="1_ictad"]
 [ext_resource type="Script" path="res://UI/Scripts/MainMenuUI.gd" id="2_g6k5l"]
 [ext_resource type="Texture2D" uid="uid://1hrkh4golxww" path="res://UI/UIResources/AtlasCutoffs/RuFlagIcon.tres" id="2_gvno1"]
 [ext_resource type="Texture2D" uid="uid://c888lpil38jmr" path="res://UI/UIResources/AtlasCutoffs/SoundOFFTexture.tres" id="3_0in30"]
+[ext_resource type="Texture2D" uid="uid://c6187sa0cf3wg" path="res://Game/Sprites/bg.png" id="3_3oyhc"]
 [ext_resource type="Texture2D" uid="uid://ln60073j7hxs" path="res://UI/UIResources/AtlasCutoffs/SoundTexture.tres" id="4_bwsqv"]
 
 [node name="MainMenuUI" type="Control"]
@@ -19,14 +20,17 @@ theme = ExtResource("1_ictad")
 script = ExtResource("2_g6k5l")
 playScenePath = "res://Game/Scenes/Level.tscn"
 
-[node name="ColorRect" type="ColorRect" parent="."]
+[node name="TextureRect" type="TextureRect" parent="."]
+modulate = Color(0.450648, 0.450648, 0.450648, 1)
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0, 0.299855, 0.5237, 1)
+texture = ExtResource("3_3oyhc")
+expand_mode = 2
+flip_h = true
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 1
@@ -66,13 +70,6 @@ theme_override_font_sizes/font_size = 32
 text = "SUBTITLE"
 horizontal_alignment = 1
 vertical_alignment = 1
-
-[node name="TitleTexture" type="TextureRect" parent="MarginContainer"]
-visible = false
-layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
-size_flags_stretch_ratio = 0.0
 
 [node name="MenuMargin" type="MarginContainer" parent="."]
 auto_translate_mode = 1

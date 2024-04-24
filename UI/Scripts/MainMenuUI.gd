@@ -23,6 +23,8 @@ func _ready() -> void:
 	soundToggler.toggled.connect(_on_sound_toggled)
 	soundSlider.value_changed.connect(_on_volume_changed)
 	update_sound.connect(Audio._on_volume_changed)
+	
+	playButton.grab_focus()
 
 
 func _on_play_pressed():
@@ -32,7 +34,7 @@ func _on_play_pressed():
 	get_tree().change_scene_to_packed(nextScene)
 
 func init_lang_icon() -> void:
-	if TranslationServer.get_locale() == "ru":
+	if TranslationServer.get_locale() == "en":
 		languageButton.icon = load("res://UI/UIResources/AtlasCutoffs/RuFlagIcon.tres")
 	else:
 		languageButton.icon = load("res://UI/UIResources/AtlasCutoffs/EnFlagIcon.tres")
@@ -41,11 +43,11 @@ func init_lang_icon() -> void:
 func _on_lang_pressed():
 	if TranslationServer.get_locale() == "ru":
 		TranslationServer.set_locale("en")
-		languageButton.icon = load("res://UI/UIResources/AtlasCutoffs/EnFlagIcon.tres")
+		languageButton.icon = load("res://UI/UIResources/AtlasCutoffs/RuFlagIcon.tres")
 		update_language.emit("en")
 	else:
 		TranslationServer.set_locale("ru")
-		languageButton.icon = load("res://UI/UIResources/AtlasCutoffs/RuFlagIcon.tres")
+		languageButton.icon = load("res://UI/UIResources/AtlasCutoffs/EnFlagIcon.tres")
 		update_language.emit("ru")
 
 

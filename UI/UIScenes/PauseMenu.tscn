@@ -74,6 +74,10 @@ vertical_alignment = 1
 [node name="ResumeButton" type="Button" parent="MarginContainer/MarginContainer/MenuLayoutContainer"]
 layout_mode = 2
 size_flags_vertical = 3
+focus_neighbor_top = NodePath("../ExitButton")
+focus_neighbor_bottom = NodePath("../RestartButton")
+focus_next = NodePath("../RestartButton")
+focus_previous = NodePath("../ExitButton")
 shortcut = SubResource("Shortcut_wq6dp")
 text = "RESUME"
 clip_text = true
@@ -81,6 +85,10 @@ clip_text = true
 [node name="RestartButton" type="Button" parent="MarginContainer/MarginContainer/MenuLayoutContainer"]
 layout_mode = 2
 size_flags_vertical = 3
+focus_neighbor_top = NodePath("../ResumeButton")
+focus_neighbor_bottom = NodePath("../ExitButton")
+focus_next = NodePath("../ExitButton")
+focus_previous = NodePath("../ResumeButton")
 text = "RESTART"
 language = "ru"
 
@@ -88,6 +96,10 @@ language = "ru"
 auto_translate_mode = 1
 layout_mode = 2
 size_flags_vertical = 3
+focus_neighbor_top = NodePath("../RestartButton")
+focus_neighbor_bottom = NodePath("../SettingsContainer/LanguageButton")
+focus_next = NodePath("../ResumeButton")
+focus_previous = NodePath("../RestartButton")
 text = "EXIT"
 clip_text = true
 
@@ -101,6 +113,10 @@ custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 4
+focus_neighbor_top = NodePath("../../ExitButton")
+focus_neighbor_bottom = NodePath("../../ResumeButton")
+focus_next = NodePath("../../ResumeButton")
+focus_previous = NodePath("../../ExitButton")
 theme_override_font_sizes/font_size = 26
 icon = ExtResource("4_ljk01")
 clip_text = true

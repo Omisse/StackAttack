@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://b0atcg605smsk"]
 
-[ext_resource type="Script" path="res://Game/Debug/DebugTextLabel.gd" id="1_bvodh"]
+[ext_resource type="Script" path="res://Debug/DebugTextLabel.gd" id="1_bvodh"]
 
 [node name="DebugText" type="Control"]
 layout_mode = 3

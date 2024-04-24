@@ -4,7 +4,7 @@ extends StaticBody2D
 @export var levelController: LevelController
 @export var ceilingLevel: int = -2
 @export var textureOverride: = preload("res://Game/Sprites/AtlasCutoffs/CeilingTexture.tres")
-@export var spriteRescale:= Vector2(1.1, 0.8)
+@export var spriteRescale:= Vector2(0.8, 0.8)
 
 @onready var collider = $CollisionShape2D
 @onready var area = $Area2D/CollisionShape2D

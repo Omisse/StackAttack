@@ -15,7 +15,7 @@ script = ExtResource("1_r2ko0")
 gridHelper = SubResource("Resource_3x501")
 
 [node name="Iterator" type="Timer" parent="."]
-wait_time = 10.0
+wait_time = 5.0
 autostart = true
 
 [connection signal="timeout" from="Iterator" to="." method="_on_iterator_timeout"]

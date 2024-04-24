@@ -5,9 +5,8 @@ class_name Box
 signal start_move
 signal destroyed(pointsAmount: int)
 
-@export var moveScale: float = 1
-@export var constantMoveSpeed: float = 50
-@export var fallSpeed: float = 100
+@export var horizontalSpeedScale = 1.5
+@export var fallSpeed: float = 450
 @export var maxMultiplier: float = 2
 @export var levelController: LevelController
 @onready var fallSound:= $"/root/Audio/BoxFall" as AudioStreamPlayer
@@ -39,7 +38,7 @@ func _physics_process(delta: float) -> void:
 			position.x = moveTarget.x
 			moving = false
 		else:
-			position.x += clampf(levelController.speed,0,maxMultiplier)*moveScale*(levelController.gridHelper.cellSize.x*actualSign)*delta
+			position.x += clampf(levelController.speed,0,maxMultiplier)*horizontalSpeedScale*(levelController.gridHelper.cellSize.x*actualSign)*delta
 	if falling:
 		position.y += clampf(levelController.speed,0,maxMultiplier)*fallSpeed*delta
 	else:

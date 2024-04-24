@@ -8,7 +8,7 @@ extends Node2D
 @export var cellScale: float = 1
 @export var defaultResolution := Vector2(128,128)
 @export var redraw := false
-@onready var boxScene := preload("res://Game/Debug/DebugBox.tscn")
+@onready var boxScene := preload("res://Debug/DebugBox.tscn")
 
 var boxes: Dictionary = {}
 var cellSize := Vector2.ZERO

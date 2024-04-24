@@ -33,6 +33,12 @@ func _ready() -> void:
 func _on_resume_pressed():
 	visible = !visible
 	get_tree().paused = visible
+	if visible:
+		ResumeButton.grab_focus()
+		if TranslationServer.get_locale() == "ru":
+			LanguageButton.icon = load("res://UI/UIResources/AtlasCutoffs/EnFlagIcon.tres")
+		else:
+			LanguageButton.icon = load("res://UI/UIResources/AtlasCutoffs/RuFlagIcon.tres")
 
 
 func _on_exit_pressed():
@@ -48,11 +54,11 @@ func _on_restart_pressed():
 func _on_lang_pressed():
 	if TranslationServer.get_locale() == "ru":
 		TranslationServer.set_locale("en")
-		LanguageButton.icon = load("res://UI/UIResources/AtlasCutoffs/EnFlagIcon.tres")
+		LanguageButton.icon = load("res://UI/UIResources/AtlasCutoffs/RuFlagIcon.tres")
 		update_language.emit("en")
 	else:
 		TranslationServer.set_locale("ru")
-		LanguageButton.icon = load("res://UI/UIResources/AtlasCutoffs/RuFlagIcon.tres")
+		LanguageButton.icon = load("res://UI/UIResources/AtlasCutoffs/EnFlagIcon.tres")
 		update_language.emit("ru")
 
 

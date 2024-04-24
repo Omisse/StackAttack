@@ -3,6 +3,7 @@ extends Node2D
 class_name LevelController
 
 signal restarting
+signal lost
 signal line_filled
 signal player_hit(health: float)
 signal score_changed(newScore: int, multiplier: float)
@@ -13,7 +14,7 @@ signal score_changed(newScore: int, multiplier: float)
 
 @export_group("Speed related settings")
 @export var speedScale: float = 1.05
-@export var defaultSpeed : float = 1.5
+@export var defaultSpeed : float = 1
 
 @export_group("Hook spawn overrides")
 @export var hookSpawnerScene: = preload("res://Game/Scenes/HookController.tscn")
@@ -38,7 +39,7 @@ signal score_changed(newScore: int, multiplier: float)
 var speed: float
 var lineCount: int = 0
 var playerHealth:= 2
-var score = 0
+var score:int = 0
 var ownUINodes: Array[Node]
 
 func _enter_tree() -> void:
@@ -83,31 +84,13 @@ func uiBootstrap():
 		childNode.request_ready()
 	add_child.call_deferred(ingameUI)
 	await ingameUI.ready
-	"""
-	var controlNode = Control.new()
-	controlNode.set_anchors_preset(Control.PRESET_FULL_RECT)
-	controlNode.process_mode = Node.PROCESS_MODE_ALWAYS
-	get_tree().root.add_child.call_deferred(controlNode)
-	var pauseUI = pauseUIScene.instantiate() as PauseUI
-	pauseUI.levelController = self
-	pauseUI.exit_pressed.connect(_on_exit)
-	pauseUI.process_mode = Node.PROCESS_MODE_ALWAYS
-	controlNode.add_child.call_deferred(pauseUI)
-	await pauseUI.ready
-	var gameUI = gameUIScene.instantiate() as GameUI
-	gameUI.levelController = self
-	gameUI.pauseMenu = pauseUI
-	gameUI.process_mode = Node.PROCESS_MODE_PAUSABLE
-	controlNode.add_child.call_deferred(gameUI)
-	await gameUI.ready
-	ownUINodes.append(controlNode)
-	"""
 
 
 func hookControllerBootstrap():
-	var hookController = hookSpawnerScene.instantiate()
+	var hookController = hookSpawnerScene.instantiate() as HookController
 	hookController.levelController = self
-	add_child(hookController)
+	hookController.hooksAmount = 1
+	add_child.call_deferred(hookController)
 	await hookController.ready
 
 func ceilingBootstrap():
@@ -156,7 +139,7 @@ func playerBootstrap():
 
 func lose():
 	Audio.play_sound(loseSound)
-	restart()
+	lost.emit()
 
 
 func restart():

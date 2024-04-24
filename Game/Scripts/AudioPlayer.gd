@@ -18,10 +18,8 @@ func play_sound(stream: AudioStreamPlayer):
 	stream.play()
 	
 func _on_score_changed(_score: int, multiplier: float):
-	"""
 	##changes the tempo of background music with score multiplier increase
-	if currentMultiplier != multiplier:
-		currentMultiplier = multiplier
-		bgMusicPlayer.pitch_scale += currentMultiplier/100
-	"""
+	#if currentMultiplier != multiplier:
+	#	currentMultiplier = multiplier
+	#	bgMusicPlayer.pitch_scale += currentMultiplier/100
 	pass
