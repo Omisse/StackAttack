@@ -25,6 +25,11 @@ func _ready() -> void:
 	update_sound.connect(Audio._on_volume_changed)
 	
 	playButton.grab_focus()
+	
+	if !Yandex.is_initGame:
+		Yandex.initGame()
+		await Yandex._initGame
+	Yandex.on_ready()
 
 
 func _on_play_pressed():

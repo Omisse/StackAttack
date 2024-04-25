@@ -16,10 +16,16 @@ func _ready() -> void:
 	levelController.lost.connect(_on_lose)
 
 func _on_lose():
-	get_tree().paused = true
 	visible = true
 	retryButton.grab_focus()
 	scoreLabel.text = tr("SCORE") % levelController.score
+	get_tree().paused = true
+	Yandex.showFullscreenAdv("fullscreenAdv_on_lose")
+	if levelController.loseSound.playing:
+		await levelController.loseSound.finished
+	Audio.stop_all_but_bg()
+	if Yandex.current_fullscreen_ad_name != "":
+		await Yandex._showFullscreenAdv
 
 func _on_retry_pressed():
 	get_tree().paused = false
