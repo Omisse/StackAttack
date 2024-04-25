@@ -26,6 +26,7 @@ driver/output_latency.web=100
 
 Audio="*res://Audio/Audio.tscn"
 Yandex="*res://YandexSDK/YandexGamesScript.gd"
+ScoreStorage="*res://YandexSDK/SDKVars.gd"
 
 [display]
 

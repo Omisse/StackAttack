@@ -4,10 +4,12 @@ class_name LoseUI
 
 signal retry
 
+
 @export var levelController: LevelController
 
 @onready var retryButton: Button = %Retry
 @onready var scoreLabel: Label = %Score
+@onready var highScoreLabel: Label = %HighScore
 
 var score: int
 
@@ -15,10 +17,16 @@ func _ready() -> void:
 	retryButton.pressed.connect(_on_retry_pressed)
 	levelController.lost.connect(_on_lose)
 
+
 func _on_lose():
+	var highscore = ScoreStorage.getPlayerScore()
+	if highscore < levelController.score:
+		highscore = levelController.score
+		ScoreStorage.setPlayerScore(highscore)
 	visible = true
 	retryButton.grab_focus()
 	scoreLabel.text = tr("SCORE") % levelController.score
+	highScoreLabel.text = tr("HIGHSCORE") % highscore
 	get_tree().paused = true
 	Yandex.showFullscreenAdv("fullscreenAdv_on_lose")
 	if levelController.loseSound.playing:
@@ -26,6 +34,12 @@ func _on_lose():
 	Audio.stop_all_but_bg()
 	if Yandex.current_fullscreen_ad_name != "":
 		await Yandex._showFullscreenAdv
+	
+	Yandex.getLeaderboards()
+	Yandex.getLeaderboardPlayerEntry('leaderboard')
+	await Yandex._getLeaderboardPlayerEntry_then or Yandex._getLeaderboardPlayerEntry_catch
+	
+	
 
 func _on_retry_pressed():
 	get_tree().paused = false

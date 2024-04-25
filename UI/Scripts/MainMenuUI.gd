@@ -26,10 +26,13 @@ func _ready() -> void:
 	
 	playButton.grab_focus()
 	
-	if !Yandex.is_initGame:
-		Yandex.initGame()
-		await Yandex._initGame
+	Yandex.initGame()
+	await Yandex._initGame
 	Yandex.on_ready()
+	
+	if !ScoreStorage.isInitialised:
+		ScoreStorage.initPlayerScore()
+		await ScoreStorage.gotPlayerEntryCallback
 
 
 func _on_play_pressed():

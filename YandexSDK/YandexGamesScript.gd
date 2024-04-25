@@ -125,26 +125,18 @@ func on_ready():
 
 
 func _ready():
-	if OS.has_feature("HTML5"):
-		print("%s, _ready() OS.has_feature('HTML5') - addon works"%[_print])
-		var js_window = JavaScriptBridge.get_interface("window")
-		js_console = JavaScriptBridge.get_interface("console")
-		initGame()
-		await _initGame
-		getPlayer(false)
-		await _getPlayer
-		getPayments()
-		getLeaderboards()
-	else:
-		print("%s, _ready() !OS.has_feature('HTML5') - addon doesn't work, platform is not html"%[_print])
+	var js_window = JavaScriptBridge.get_interface("window")
+	js_console = JavaScriptBridge.get_interface("console")
+	initGame()
+	await _initGame
+	getPlayer(false)
+	await _getPlayer
+	getPayments()
+	getLeaderboards()
 
 #region initGame
 # https://yandex.ru/dev/games/doc/en/sdk/sdk-gameready
 func initGame(): ##auto-call from _ready() on game start
-	if _print_debug: print("%s initGame()"%[_print])
-	if !OS.has_feature("HTML5"):
-		if _print_debug: print("%s, initGame() !OS.has_feature('HTML5') - addon doesn't work, platform is not html"%[_print])
-		return
 	var js_window:JavaScriptObject = JavaScriptBridge.get_interface("window")
 	js_window.YaGames.init().then(js_callback_initGame)
 
@@ -152,6 +144,8 @@ func initGame(): ##auto-call from _ready() on game start
 func _callback_init(args):
 	if _print_debug: print("%s js_callback_initGame(args:%s)"%[_print, args])
 	js_ysdk = args[0]
+	var js_window = JavaScriptBridge.get_interface("window")
+	js_window.ysdk = js_ysdk
 	is_initGame = true
 	_initGame.emit()
 	if _print_debug: print("%s js_callback_initGame(args:%s) is_initGame = true"%[_print, args])
@@ -162,15 +156,18 @@ func _callback_init(args):
 # https://yandex.ru/dev/games/doc/en/sdk/sdk-adv
 #region showFullscreenAdv()
 func showFullscreenAdv(ad_name:String):
-	if not _check_func_valid("showFullscreenAdv", []): return
-	var js_dictionary:JavaScriptObject = JavaScriptBridge.create_object("Object")
-	var js_dictionary_2:JavaScriptObject = JavaScriptBridge.create_object("Object")
+	var js_dictionary:JavaScriptObject = null
+	var js_dictionary_2:JavaScriptObject = null
+	js_dictionary = JavaScriptBridge.create_object("Object")
+	js_dictionary_2 = JavaScriptBridge.create_object("Object")
+	#js_callback_showFullscreenAdv_onClose = JavaScriptBridge.create_callback(_callback_fullscreenAdv_close)
+	#js_callback_showFullscreenAdv_onError = JavaScriptBridge.create_callback(_callback_fullscreenAdv_error)
 	js_dictionary_2["onClose"] = js_callback_showFullscreenAdv_onClose
 	js_dictionary_2["onError"] = js_callback_showFullscreenAdv_onError
 	js_dictionary["callbacks"] = js_dictionary_2
 	if _print_debug: js_console.log(js_dictionary)
 	current_fullscreen_ad_name = ad_name
-	now_fullscreen = true
+	now_fullscreen = true	
 	js_ysdk.adv.showFullscreenAdv(js_dictionary)
 
 
@@ -193,7 +190,6 @@ func _callback_fullscreenAdv_error(args:Array):
 
 #region showRewardedVideo()
 func showRewardedVideo(new_current_rewarded_ad_name:String):
-	if not _check_func_valid("showRewardedVideo", [new_current_rewarded_ad_name]): return
 
 	_current_rewarded_success = false
 	current_rewarded_ad_name = new_current_rewarded_ad_name
@@ -235,13 +231,11 @@ func _callback_rewarded_rewarded(args:Array):
 # https://yandex.ru/dev/games/doc/en/sdk/sdk-player#auth
 #region getPlayer()
 func getPlayer(scopes:bool):
-	if not _check_func_valid("getPlayer", [scopes]): return
 	var js_dictionary:JavaScriptObject = JavaScriptBridge.create_object("Object")
 	js_dictionary["scopes"] = scopes
 	js_ysdk.getPlayer(js_dictionary).then(js_callback_getPlayer)
 
 func getPlayer_await(scopes:bool):
-	if not _check_func_valid("getPlayer_yield", [scopes]): return
 	getPlayer(scopes)
 	await _getPlayer
 
@@ -255,7 +249,6 @@ func _callback_getPlayer(args:Array):
 # https://yandex.ru/dev/games/doc/en/sdk/sdk-player#ingame-data
 #region setData()
 func setData(data:Dictionary):
-	if not _check_func_valid("setData", []): return
 	if js_ysdk_player == null: 
 		if _print_debug: print("%s setData(data) js_ysdk_player == null"%[_print])
 		return
@@ -268,7 +261,6 @@ func setData(data:Dictionary):
 #endregion
 #region getData()
 func getData():
-	if not _check_func_valid("getData", []): return
 	if js_ysdk_player == null: 
 		if _print_debug: print("%s getData() js_ysdk_player == null"%[_print])
 		return
@@ -276,7 +268,6 @@ func getData():
 	return
 
 func getData_await() -> Dictionary:
-	if not _check_func_valid("getData_yield", []): return {}
 	if js_ysdk_player == null: 
 		if _print_debug: print("%s getData_yield() js_ysdk_player == null"%[_print])
 		return {}
@@ -307,7 +298,6 @@ func _callback_getData(args:Array):
 # https://yandex.ru/dev/games/doc/en/sdk/sdk-purchases#install
 #region getPayments()
 func getPayments():
-	if not _check_func_valid("getPayments", []): return
 	var js_dictionary:JavaScriptObject = JavaScriptBridge.create_object("Object")
 	js_dictionary["signed"] = true
 	js_ysdk.getPayments(js_dictionary).then(js_callback_getPayments_then).catch(js_callback_getPayments_catch)
@@ -328,7 +318,6 @@ func _callback_getPayments_catch(args:Array):
 #region purchase()
 # https://yandex.ru/dev/games/doc/en/sdk/sdk-purchases#payments-purchase
 func purchase(id:String):
-	if not _check_func_valid("purchase", [id]): return
 	if js_ysdk_payments == null:
 		if _print_debug: print("%s purchase(id:%s) js_ysdk_payments == null"%[_print, id])
 		return
@@ -358,8 +347,6 @@ func _callback_purchase_catch(args:Array):
 
 # return [Purchase]
 func getPurchases_yield() -> Array:
-	if not _check_func_valid("getPurchases_yield", []):
-		printerr("getPurchases_yield() not _check_func_valid")
 	if js_ysdk_payments == null:
 		if _print_debug: printerr("%s getPurchases js_ysdk_payments == null"%[_print])
 	getPurchases()
@@ -367,7 +354,6 @@ func getPurchases_yield() -> Array:
 	return _current_get_purchases_then
 
 func getPurchases():
-	if not _check_func_valid("getPurchases", []): return
 	if js_ysdk_payments == null:
 		if _print_debug: print("%s getPurchases js_ysdk_payments == null"%[_print])
 		return
@@ -396,7 +382,6 @@ func _callback_getPurchases_catch(args:Array):
 #https://yandex.ru/dev/games/doc/en/sdk/sdk-leaderboard
 #region getLeaderboards()
 func getLeaderboards():
-	if not _check_func_valid("getLeaderboards", []): return
 	js_ysdk_lb = js_ysdk.getLeaderboards().then(js_callback_getLeaderboards)
 
 func _callback_getLeaderboards(args:Array):
@@ -410,7 +395,6 @@ func _callback_getLeaderboards(args:Array):
 #region getLeaderboardDescription()
 #https://yandex.ru/dev/games/doc/en/sdk/sdk-leaderboard#description
 func getLeaderboardDescription(leaderboardName:String):
-	if not _check_func_valid("getLeaderboardDescription", [leaderboardName]): return
 	if js_ysdk_lb == null:
 		if _print_debug: print("%s getLeaderboardDescription(leaderboardName:%s) js_ysdk_lb == null"%[_print, leaderboardName])
 		return
@@ -446,7 +430,6 @@ func _callback_getLeaderboardDescription(args:Array):
 #region setLeaderboardScore()
 #https://yandex.ru/dev/games/doc/en/sdk/sdk-leaderboard#set-score
 func setLeaderboardScore(leaderboardName:String, score:int):
-	if not _check_func_valid("setLeaderboardScore", [leaderboardName, score]): return
 	if js_ysdk_lb == null:
 		if _print_debug: print("%s setLeaderboardScore(leaderboardName:%s, score:%s) js_ysdk_lb == null"%[_print, leaderboardName, score])
 		return
@@ -483,11 +466,14 @@ func js_LeaderboardPlayerEntry_to_Dictionary(object:JavaScriptObject) -> Diction
 
 
 func getLeaderboardPlayerEntry(leaderboardName:String):
-	if not _check_func_valid("getLeaderboardPlayerEntry", [leaderboardName]): return
 	if js_ysdk_lb == null:
 		if _print_debug: print("%s getLeaderboardDescription(leaderboardName:%s) js_ysdk_lb == null"%[_print, leaderboardName])
 		return
-	js_ysdk_lb.getLeaderboardPlayerEntry(leaderboardName).then(js_callback_getLeaderboardPlayerEntry_then).catch(js_callback_getLeaderboardPlayerEntry_catch)
+	_current_isAvailableMethod = 'leaderboards.getLeaderboardPlayerEntry'
+	js_ysdk.isAvailableMethod('leaderboards.getLeaderboardPlayerEntry').then(js_callback_isAvailableMethod)
+	await _isAvailableMethod
+	if _current_isAvailableMethod_result:
+		js_ysdk_lb.getLeaderboardPlayerEntry(leaderboardName).then(js_callback_getLeaderboardPlayerEntry_then).catch(js_callback_getLeaderboardPlayerEntry_catch)
 
 func _callback_getLeaderboardPlayerEntry_then(args:Array):
 	if _print_debug:
@@ -508,7 +494,6 @@ func _callback_getLeaderboardPlayerEntry_catch(args:Array):
 #region getLeaderboardEntries()
 #https://yandex.ru/dev/games/doc/ru/sdk/sdk-leaderboard#get-entries
 func getLeaderboardEntries(leaderboardName:String):
-	if not _check_func_valid("getLeaderboardEntries", [leaderboardName]): return
 	if js_ysdk_lb == null:
 		if _print_debug: print("%s getLeaderboardEntries(leaderboardName:%s) js_ysdk_lb == null"%[_print, leaderboardName])
 		return
@@ -544,11 +529,9 @@ func _callback_getLeaderboardEntries_catch(args:Array):
 # https://yandex.ru/dev/games/doc/en/sdk/sdk-review
 #region canReview()
 func canReview():
-	if not _check_func_valid("canReview", []): return
 	js_ysdk.feedback.canReview().then(js_callback_canReview)
 
 func _canReview_await():
-	if not _check_func_valid("_canReview_await", []): return
 	var result:bool 
 	canReview()
 	await _canReview
@@ -574,7 +557,6 @@ func _callback_canReview(args:Array):
 
 #region requestReview()
 func requestReview():
-	if not _check_func_valid("requestReview", []): return
 	canReview()
 	await _canReview
 	if _current_canReview:
@@ -597,7 +579,6 @@ func _callback_requestReview(args:Array):
 # https://yandex.ru/dev/games/doc/en/sdk/sdk-shortcut
 #region canShowPrompt()
 func canShowPrompt():
-	if not _check_func_valid("canShowPrompt", []): return
 	js_ysdk.shortcut.canShowPrompt().then(js_callback_canShowPrompt)
 
 func _callback_canShowPrompt(args:Array):
@@ -608,7 +589,6 @@ func _callback_canShowPrompt(args:Array):
 	_canShowPrompt.emit(_current_canShowPrompt)
 
 func canShowPrompt_await():
-	if not _check_func_valid("canShowPrompt_await", []): return
 	var result:bool
 	canShowPrompt()
 	await _canShowPrompt
@@ -618,7 +598,6 @@ func canShowPrompt_await():
 
 #region showPrompt()
 func showPrompt():
-	if not _check_func_valid("showPrompt", []): return
 	canShowPrompt()
 	await _canShowPrompt
 	if _current_canShowPrompt:
@@ -638,7 +617,6 @@ func _callback_showPrompt(args:Array):
 #region clientFeatures
 #clientFeatures = [{"name":String, value:String}]
 func getFlags(clientFeatures:Array = []):
-	if not _check_func_valid("getFlags", [clientFeatures]): return
 	if clientFeatures.size() == 0:
 		js_ysdk.getFlags().then(js_callback_getFlags_then).catch(js_callback_getFlags_catch)
 	else:
@@ -679,7 +657,6 @@ func _callback_getFlags_then(args:Array):
 # clientFeatures = [{"name":String, value:String}]
 # return Dictionary OR js error
 func getFlags_await(clientFeatures:Array = []):
-	if not _check_func_valid("getFlags_yield", [clientFeatures]): return
 	getFlags(clientFeatures)
 	await _getFlags
 	return _current_getFlags
@@ -690,7 +667,6 @@ func getFlags_await(clientFeatures:Array = []):
 # return user lang - en/ru/tr/...
 func getLang() -> String:
 	var result:String
-	if not _check_func_valid("getLang", []): return "!is_initGame. Call the function after the initGame event"
 	if js_ysdk_player == null:
 		result = js_ysdk.environment.i18n.lang
 		if _print_debug: print("%s getLang() js_ysdk_player == null, result: %s"%[_print, result])
@@ -699,14 +675,3 @@ func getLang() -> String:
 		result = js_ysdk_player._personalInfo.lang
 		if _print_debug: print("%s getLang() result: %s"%[_print, result])
 	return result
-
-func _check_func_valid(print_function_name:String, args:Array) -> bool:
-	var is_valid:bool = true
-	if _print_debug: print("%s %s(args:%s)"%[_print, print_function_name, args])
-	if !OS.has_feature("HTML5"):
-		if _print_debug: print("%s, %s(args:%s) !OS.has_feature('HTML5') - addon doesn't work, platform is not html"%[_print, print_function_name, args])
-		is_valid = false
-	if !is_initGame:
-		if _print_debug: print("%s %s(args:%s) is_initGame == false"%[_print, print_function_name, args])
-		is_valid = false
-	return is_valid
