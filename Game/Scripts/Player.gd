@@ -24,7 +24,6 @@ var was_on_floor: bool
 func _ready() -> void:
 	health = healthPoints
 	levelController.restarting.connect(reset_health)
-	walkingSound.play()
 
 func _process(delta: float) -> void:
 	##vertical movement
@@ -42,6 +41,8 @@ func _process(delta: float) -> void:
 	var direction := Input.get_axis("MoveLeft", "MoveRight")
 	if direction:
 		if is_on_floor():
+			if !walkingSound.playing:
+				Audio.play_sound(walkingSound)
 			walkingSound.stream_paused = false
 		else: walkingSound.stream_paused = true
 		velocity.x = direction * speed * levelScale

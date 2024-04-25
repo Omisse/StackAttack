@@ -34,6 +34,7 @@ func _on_resume_pressed():
 	visible = !visible
 	get_tree().paused = visible
 	if visible:
+		Audio.stop_all_but_bg()
 		ResumeButton.grab_focus()
 		if TranslationServer.get_locale() == "ru":
 			LanguageButton.icon = load("res://UI/UIResources/AtlasCutoffs/EnFlagIcon.tres")

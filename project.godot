@@ -12,24 +12,28 @@ config_version=5
 
 config/name="StackAttack"
 run/main_scene="res://UI/UIScenes/MainMenuUI.tscn"
+run/disable_stdout=true
+run/disable_stderr=true
 config/features=PackedStringArray("4.3", "GL Compatibility")
 
 [audio]
 
 buses/default_bus_layout="res://Audio/AudioBus.tres"
+driver/output_latency=100
+driver/output_latency.web=100
 
 [autoload]
 
 Audio="*res://Audio/Audio.tscn"
+Yandex="*res://YandexSDK/YandexGamesScript.gd"
 
 [display]
 
 window/size/viewport_width=1920
 window/size/viewport_height=1080
-window/size/borderless=true
+window/size/mode=2
 window/stretch/mode="viewport"
-window/stretch/aspect="expand"
-window/vsync/vsync_mode=0
+window/stretch/aspect="ignore"
 
 [input]
 

@@ -16,7 +16,23 @@ func _on_volume_changed(volume: float):
 
 func play_sound(stream: AudioStreamPlayer):
 	stream.play()
+
+func pause_all():
+	for node in get_children():
+		var stream = node as AudioStreamPlayer
+		stream.stream_paused = true
 	
+func resume_all():
+	for node in get_children():
+		var stream = node as AudioStreamPlayer
+		stream.stream_paused = false
+
+func stop_all_but_bg():
+	for node in get_children():
+		if node != bgMusicPlayer:
+			var stream = node as AudioStreamPlayer
+			stream.stop()
+
 func _on_score_changed(_score: int, multiplier: float):
 	##changes the tempo of background music with score multiplier increase
 	#if currentMultiplier != multiplier:

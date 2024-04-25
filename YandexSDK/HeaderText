@@ -1,0 +1,37 @@
+<script src="https://yandex.ru/games/sdk/v2"></script>
+
+<script>
+
+YaGames.init().then(ysdk => {
+	window.ysdk = ysdk;
+});
+
+var lb;
+
+ysdk.getLeaderboards()
+  .then(_lb => lb = _lb);
+
+function setLbScore(newScore: integer)
+{
+	window.ysdk.getLeaderboards()
+		.then(lb => {
+			lb.setLeaderboardScore('leaderboard', newScore)
+		})
+}
+
+function ShowAd(callback) {
+	window.ysdk.adv.showFullscreenAdv({
+		callbacks: {
+			onClose : function(wasShown) {
+				callback(true);
+				console.log("FullScreen Ad Shown!");
+			},
+			onError : function(error) {
+				callback(false);
+				console.log("Fullscreen Ad Error: ", error);
+			}
+		}
+	})
+}
+
+</script>
