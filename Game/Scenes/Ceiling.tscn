@@ -1,13 +1,42 @@
-[gd_scene load_steps=4 format=3 uid="uid://cg6cjckblq2uh"]
+[gd_scene load_steps=4 format=3 uid="uid://by5n37ngxhjhx"]
 
-[ext_resource type="Script" path="res://Game/Scripts/Ceiling.gd" id="1_3ye2t"]
+[sub_resource type="GDScript" id="GDScript_2d2dp"]
+script/source = "extends StaticBody2D
+
+
+@export var levelController: LevelController
+@export var ceilingLevel: int = -2
+@export var textureOverride: = preload(\"res://Game/Sprites/AtlasCutoffs/CeilingTexture.tres\")
+@export var spriteRescale:= Vector2(0.8, 0.8)
+
+@onready var collider = $CollisionShape2D
+@onready var area = $Area2D/CollisionShape2D
+
+func _ready() -> void:
+	var gridWidth = levelController.fieldSize.x+2
+	var canvasGroup = CanvasGroup.new()
+	add_child(canvasGroup)
+	for tile in gridWidth:
+		var sprite = Sprite2D.new()
+		sprite.texture = textureOverride
+		sprite.position = levelController.gridHelper.gridToWorld(Vector2i(tile-1, ceilingLevel))
+		sprite.scale.x = spriteRescale.x
+		sprite.scale.y = spriteRescale.y
+		canvasGroup.add_child(sprite)
+	collider.shape.size.x = get_viewport_rect().size.x
+	collider.shape.size.y = levelController.gridHelper.cellSize.y
+	collider.position.y = levelController.gridHelper.gridToWorld(Vector2i(0,ceilingLevel)).y
+	collider.position.x = levelController.gridHelper.gridToWorld(Vector2i(roundi(levelController.fieldSize.x/2.0),0)).x-levelController.gridHelper.cellSize.x
+	area.shape = collider.shape
+	area.position = collider.position
+"
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_62nmc"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_oomt4"]
 
 [node name="Ceiling" type="StaticBody2D"]
-script = ExtResource("1_3ye2t")
+script = SubResource("GDScript_2d2dp")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_62nmc")

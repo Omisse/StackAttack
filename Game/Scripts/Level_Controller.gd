@@ -8,9 +8,9 @@ signal line_filled
 signal player_hit(health: float)
 signal score_changed(newScore: int, multiplier: float)
 
-@export_group("Grid settings")
-@export var fieldSize := Vector2i(13,5)
-@export var gridHelper:GridHelper
+@export_group("Grid")
+@export var gameFieldStart: Vector2i
+@export var gameFieldEnd: Vector2i
 
 @export_group("Speed related settings")
 @export var speedScale: float = 1.05
@@ -19,14 +19,9 @@ signal score_changed(newScore: int, multiplier: float)
 @export_group("Hook spawn overrides")
 @export var hookSpawnerScene: = preload("res://Game/Scenes/HookController.tscn")
 
-@export_group("Boundaries overrides")
-@export var floorScene = preload("res://Game/Scenes/Floor.tscn")
-@export var wallScene = preload("res://Game/Scenes/Walls.tscn")
-@export var ceilingScene = preload("res://Game/Scenes/Ceiling.tscn")
-
 @export_group("Field overrides")
 @export var playerScene = preload("res://Game/Scenes/Player.tscn")
-@export var backgroundTexture = preload("res://Game/Sprites/bg.png")
+@export var areaCollider = preload("res://Game/Scenes/AreaCollider.tscn")
 
 @export_group("UI overrides")
 @export var ingameUIScene = preload("res://UI/UIScenes/IngameUI.tscn")
@@ -34,24 +29,29 @@ signal score_changed(newScore: int, multiplier: float)
 
 
 @onready var loseSound: AudioStreamPlayer = $"/root/Audio/Lose"
-
+@onready var grid = $TileMap as TileMap
+@onready var iterator = $Iterator
 
 var speed: float
 var lineCount: int = 0
+var fieldSize: Vector2i
 var playerHealth:= 2
 var score:int = 0
 var ownUINodes: Array[Node]
 
 func _enter_tree() -> void:
-	gridHelper.initialize_grid()
 	speed = defaultSpeed
 
 
 func _ready() -> void:
+	iterator.timeout.connect(_on_iterator_timeout)
 	await bootstrap()
+	fieldSize.x = gameFieldEnd.x - gameFieldStart.x + 1
+	fieldSize.y = gameFieldEnd.y - gameFieldStart.y + 1
 	score_changed.emit(score, speed)
 
 func _physics_process(delta: float) -> void:
+	position = $ColorRect.position
 	if lineCount >= fieldSize.x:
 		line_filled.emit()
 		lineCount -= fieldSize.x
@@ -63,14 +63,23 @@ func _on_iterator_timeout() -> void:
 
 
 func bootstrap():
-	backgroundBootstrap()
-	floorBootstrap()
-	ceilingBootstrap()
-	wallsBootstrap()
+	gridAreaCreate()
 	playerBootstrap()
 	hookControllerBootstrap()
 	uiBootstrap()
 	audioBootstrap()
+
+
+func gridAreaCreate():
+	for layer in 2:
+		var usedCells = grid.get_used_cells(layer) as Array[Vector2i]
+		for cell in usedCells:
+			var newArea = areaCollider.instantiate()
+			newArea.position = grid.map_to_local(cell)
+			var colliderShape = newArea.get_child(0).shape as RectangleShape2D
+			colliderShape.size = grid.tile_set.tile_size
+			add_child(newArea)
+		
 
 
 func audioBootstrap():
@@ -93,44 +102,12 @@ func hookControllerBootstrap():
 	add_child.call_deferred(hookController)
 	await hookController.ready
 
-func ceilingBootstrap():
-	var ceiling = ceilingScene.instantiate()
-	ceiling.levelController = self
-	ceiling.scale *= gridHelper.cellScale
-	add_child(ceiling)
-	await ceiling.ready
-
-func floorBootstrap():
-	var floor = floorScene.instantiate()
-	floor.levelController = self
-	floor.scale *= gridHelper.cellScale
-	add_child(floor)
-	await floor.ready
-
-func wallsBootstrap():
-	var walls = wallScene.instantiate()
-	walls.levelController = self
-	walls.scale *= gridHelper.cellScale
-	add_child(walls)
-	await walls.ready
-
-
-func backgroundBootstrap():
-	var background = Sprite2D.new()
-	background.texture = backgroundTexture
-	background.position = get_viewport_rect().size/2-Vector2(0, gridHelper.offset.y/2)
-	background.scale *= gridHelper.cellScale
-	add_child(background)
-	await background.ready
-
 
 func playerBootstrap():
 	var player = playerScene.instantiate()
 	player.levelController = self
-	var grid_playerPos: Vector2i = Vector2i(floori(fieldSize.x/2), fieldSize.y-1)
-	player.position = gridHelper.gridToWorld(grid_playerPos)
-	player.scale *= gridHelper.cellScale
-	player.levelScale *= gridHelper.cellScale
+	var grid_playerPos: Vector2i = Vector2i(gameFieldStart.x+roundi((gameFieldEnd.x-gameFieldStart.x)/2),gameFieldEnd.y-1)
+	player.position = grid.map_to_local(grid_playerPos)
 	if player.has_signal("hit"):
 		player.hit.connect(_on_player_hit)
 	add_child(player)

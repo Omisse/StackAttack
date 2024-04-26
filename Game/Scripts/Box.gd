@@ -38,12 +38,12 @@ func _physics_process(delta: float) -> void:
 			position.x = moveTarget.x
 			moving = false
 		else:
-			position.x += clampf(levelController.speed,0,maxMultiplier)*horizontalSpeedScale*(levelController.gridHelper.cellSize.x*actualSign)*delta
+			position.x += clampf(levelController.speed,0,maxMultiplier)*horizontalSpeedScale*(levelController.grid.tile_set.tile_size.x*actualSign)*delta
 	if falling:
 		position.y += clampf(levelController.speed,0,maxMultiplier)*fallSpeed*delta
 	else:
-		position.y = levelController.gridHelper.gridToWorld(levelController.gridHelper.worldToGrid(position)).y
-	if levelController.gridHelper.worldToGrid(position).y == -1 and !falling and !moving:
+		position.y = levelController.grid.map_to_local(levelController.grid.local_to_map(position)).y
+	if levelController.grid.local_to_map(position).y == 0 and !falling and !moving:
 		levelController.lose()
 	
 func push(side: int):
@@ -53,12 +53,12 @@ func push(side: int):
 				-1:
 					if !leftArea.has_overlapping_areas():
 						moving = true
-						moveTarget = levelController.gridHelper.gridToWorld(levelController.gridHelper.worldToGrid(position)+Vector2i(side, 0))
+						moveTarget = levelController.grid.map_to_local(levelController.grid.local_to_map(position)+Vector2i(side, 0))
 						start_move.emit()
 				1:
 					if !rightArea.has_overlapping_areas():
 						moving = true
-						moveTarget = levelController.gridHelper.gridToWorld(levelController.gridHelper.worldToGrid(position)+Vector2i(side, 0))
+						moveTarget = levelController.grid.map_to_local(levelController.grid.local_to_map(position)+Vector2i(side, 0))
 						start_move.emit()
 
 
@@ -81,7 +81,7 @@ func destroy() -> void:
 func _on_down_box_area_area_entered(area: Area2D) -> void:
 	falling = false
 	Audio.play_sound(fallSound)
-	if levelController.gridHelper.worldToGrid(position).y >= levelController.fieldSize.y-1 and !isOnGround:
+	if levelController.grid.local_to_map(position).y >= levelController.gameFieldEnd.y and !isOnGround:
 		isOnGround = true
 		levelController.lineCount+=1
 		levelController.line_filled.connect(destroy)

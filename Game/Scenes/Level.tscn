@@ -1,21 +1,269 @@
-[gd_scene load_steps=4 format=3 uid="uid://b2aqk4udtsuke"]
+[gd_scene load_steps=7 format=3 uid="uid://b2aqk4udtsuke"]
 
-[ext_resource type="Script" path="res://Game/Scripts/LevelController.gd" id="1_r2ko0"]
-[ext_resource type="Script" path="res://Game/Scripts/GridHelper.gd" id="2_u5ev4"]
+[ext_resource type="Texture2D" uid="uid://b1ar4qkoqcbt7" path="res://Game/Sprites/EnvironmentTiles.png" id="3_n2fv5"]
+[ext_resource type="Texture2D" uid="uid://c6187sa0cf3wg" path="res://Game/Sprites/bg.png" id="4_3afkf"]
 
-[sub_resource type="Resource" id="Resource_3x501"]
-script = ExtResource("2_u5ev4")
-offset = Vector2(128, 256)
-cellScale = 1.0
-defaultResolution = Vector2(128, 128)
+[sub_resource type="GDScript" id="GDScript_i08al"]
+script/source = "extends Node2D
+
+class_name LevelController
+
+signal restarting
+signal lost
+signal line_filled
+signal player_hit(health: float)
+signal score_changed(newScore: int, multiplier: float)
+
+@export_group(\"Grid\")
+@export var gameFieldStart: Vector2i
+@export var gameFieldEnd: Vector2i
+
+var leftHookPosition: Vector2
+var rightHookPosition: Vector2
+
+@export_group(\"Speed related settings\")
+@export var speedScale: float = 1.05
+@export var defaultSpeed : float = 1
+
+@export_group(\"Hook spawn overrides\")
+@export var hookSpawnerScene: = preload(\"res://Game/Scenes/HookController.tscn\")
+
+@export_group(\"Field overrides\")
+@export var playerScene = preload(\"res://Game/Scenes/Player.tscn\")
+@export var areaCollider = preload(\"res://Game/Scenes/AreaCollider.tscn\")
+
+@export_group(\"UI overrides\")
+@export var ingameUIScene = preload(\"res://UI/UIScenes/IngameUI.tscn\")
+@export var mainMenuScene = preload(\"res://UI/UIScenes/MainMenuUI.tscn\")
+
+
+@onready var loseSound: AudioStreamPlayer = $\"/root/Audio/Lose\"
+@onready var grid = $TileMap as TileMap
+
+var speed: float
+var lineCount: int = 0
+var fieldSize: Vector2i
+var playerHealth:= 2
+var score:int = 0
+var ownUINodes: Array[Node]
+
+func _enter_tree() -> void:
+	speed = defaultSpeed
+
+
+func _ready() -> void:
+	await bootstrap()
+	fieldSize.x = gameFieldEnd.x - gameFieldStart.x + 1
+	fieldSize.y = gameFieldEnd.y - gameFieldStart.y + 1
+	score_changed.emit(score, speed)
+
+func _physics_process(delta: float) -> void:
+	if lineCount >= fieldSize.x:
+		line_filled.emit()
+		lineCount -= fieldSize.x
+
+
+func _on_iterator_timeout() -> void:
+	speed *= speedScale
+	score_changed.emit(score, speed)
+
+
+func bootstrap():
+	gridAreaCreate()
+	playerBootstrap()
+	hookControllerBootstrap()
+	uiBootstrap()
+	audioBootstrap()
+
+
+func gridAreaCreate():
+	for layer in 2:
+		var usedCells = grid.get_used_cells(layer) as Array[Vector2i]
+		for cell in usedCells:
+			var newArea = areaCollider.instantiate()
+			newArea.position = grid.map_to_local(cell)
+			var colliderShape = newArea.get_child(0).shape as RectangleShape2D
+			colliderShape.size = grid.tile_set.tile_size
+			add_child(newArea)
+		
+
+
+func audioBootstrap():
+	score_changed.connect(Audio._on_score_changed)
+
+
+func uiBootstrap():
+	var ingameUI = ingameUIScene.instantiate()
+	for childNode in ingameUI.get_children():
+		childNode.levelController = self
+		childNode.request_ready()
+	add_child.call_deferred(ingameUI)
+	await ingameUI.ready
+
+
+func hookControllerBootstrap():
+	var hookController = hookSpawnerScene.instantiate() as HookController
+	hookController.levelController = self
+	hookController.hooksAmount = 1
+	add_child.call_deferred(hookController)
+	await hookController.ready
+
+
+func playerBootstrap():
+	var player = playerScene.instantiate()
+	player.levelController = self
+	var grid_playerPos: Vector2i = Vector2i(floori(fieldSize.x/2), fieldSize.y)
+	player.position = grid.map_to_local(grid_playerPos)
+	if player.has_signal(\"hit\"):
+		player.hit.connect(_on_player_hit)
+	add_child(player)
+	await player.ready
+
+
+func lose():
+	Audio.play_sound(loseSound)
+	lost.emit()
+
+
+func restart():
+	restarting.emit()
+	speed = defaultSpeed
+	lineCount = 0
+	score = 0
+	_on_player_hit(2)
+	score_changed.emit(score, speed)
+	
+func _on_player_hit(health):
+	playerHealth = health
+	player_hit.emit(playerHealth)
+
+func add_score(amount:int):
+	score+=amount*speed
+	score_changed.emit(score, speed)
+	
+func _on_exit():
+	get_tree().change_scene_to_packed(mainMenuScene)
+"
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_611nn"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_w6qi7"]
+texture = ExtResource("3_n2fv5")
+texture_region_size = Vector2i(128, 128)
+2:0/0 = 0
+2:0/0/physics_layer_0/linear_velocity = Vector2(0, 0)
+2:0/0/physics_layer_0/angular_velocity = 0.0
+2:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-64, -64, 64, -64, 64, 64, -64, 64)
+1:1/0 = 0
+1:1/0/physics_layer_0/linear_velocity = Vector2(0, 0)
+1:1/0/physics_layer_0/angular_velocity = 0.0
+1:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-64, -64, 64, -64, 64, 64, -64, 64)
+1:0/0 = 0
+1:0/0/physics_layer_0/linear_velocity = Vector2(0, 0)
+1:0/0/physics_layer_0/angular_velocity = 0.0
+1:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-64, -64, 64, -64, 64, 64, -64, 64)
+0:0/0 = 0
+0:0/0/physics_layer_0/linear_velocity = Vector2(0, 0)
+0:0/0/physics_layer_0/angular_velocity = 0.0
+0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-64, -64, 64, -64, 64, 64, -64, 64)
+0:1/0 = 0
+0:1/0/physics_layer_0/linear_velocity = Vector2(0, 0)
+0:1/0/physics_layer_0/angular_velocity = 0.0
+0:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-64, -64, 64, -64, 64, 64, -64, 64)
+
+[sub_resource type="TileSet" id="TileSet_defxh"]
+tile_size = Vector2i(128, 128)
+physics_layer_0/collision_layer = 3
+physics_layer_0/physics_material = SubResource("PhysicsMaterial_611nn")
+sources/1 = SubResource("TileSetAtlasSource_w6qi7")
 
 [node name="Level" type="Node2D"]
 process_mode = 1
-script = ExtResource("1_r2ko0")
-gridHelper = SubResource("Resource_3x501")
+script = SubResource("GDScript_i08al")
+gameFieldStart = Vector2i(1, 1)
+gameFieldEnd = Vector2i(13, 6)
+speedScale = null
+defaultSpeed = null
+hookSpawnerScene = null
+playerScene = null
+areaCollider = null
+ingameUIScene = null
+mainMenuScene = null
 
 [node name="Iterator" type="Timer" parent="."]
 wait_time = 5.0
 autostart = true
+
+[node name="TileMap" type="TileMap" parent="."]
+tile_set = SubResource("TileSet_defxh")
+format = 2
+layer_0/navigation_enabled = false
+layer_0/tile_data = PackedInt32Array(65550, 65537, 1, 131086, 65537, 1, 196622, 65537, 1, 262158, 65537, 1, 327694, 65537, 1, 393230, 65537, 1, 458766, 65537, 1, 14, 65537, 1, 0, 65537, 1, 65536, 65537, 1, 131072, 65537, 1, 196608, 65537, 1, 262144, 65537, 1, 327680, 65537, 1, 393216, 65537, 1, 458752, 65537, 1, 524302, 65537, 1, 524288, 65537, 1)
+layer_1/name = "Layer1"
+layer_1/z_index = 1
+layer_1/navigation_enabled = false
+layer_1/tile_data = PackedInt32Array(458752, 1, 1, 458753, 1, 1, 458754, 1, 1, 458755, 1, 1, 458756, 1, 1, 458757, 1, 1, 458758, 1, 1, 458759, 1, 1, 458760, 1, 1, 458761, 1, 1, 458762, 1, 1, 458763, 1, 1, 458764, 1, 1, 458765, 1, 1, 458766, 1, 1, 524288, 1, 805306369, 524289, 1, 805306369, 524290, 1, 805306369, 524291, 1, 805306369, 524292, 1, 805306369, 524293, 1, 805306369, 524294, 1, 805306369, 524295, 1, 805306369, 524296, 1, 805306369, 524297, 1, 805306369, 524298, 1, 805306369, 524299, 1, 805306369, 524300, 1, 805306369, 524301, 1, 805306369, 524302, 1, 805306369, 14, 65537, 0, 13, 65537, 0, 12, 65537, 0, 11, 65537, 0, 10, 65537, 0, 9, 65537, 0, 8, 65537, 0, 7, 65537, 0, 6, 65537, 0, 5, 65537, 0, 4, 65537, 0, 3, 65537, 0, 2, 65537, 0, 1, 65537, 0, 0, 65537, 0)
+
+[node name="BgPics" type="CanvasGroup" parent="."]
+
+[node name="Background" type="Sprite2D" parent="BgPics"]
+z_index = -2
+position = Vector2(960, 540)
+scale = Vector2(1.4, 1.4)
+texture = ExtResource("4_3afkf")
+
+[node name="Background2" type="Sprite2D" parent="BgPics"]
+z_index = -2
+position = Vector2(-1515, 540)
+scale = Vector2(1.4, 1.4)
+texture = ExtResource("4_3afkf")
+
+[node name="Background3" type="Sprite2D" parent="BgPics"]
+z_index = -2
+position = Vector2(3437, 540)
+scale = Vector2(1.4, 1.4)
+texture = ExtResource("4_3afkf")
+
+[node name="Background4" type="Sprite2D" parent="BgPics"]
+z_index = -2
+position = Vector2(3437, -886.2)
+scale = Vector2(1.4, 1.4)
+texture = ExtResource("4_3afkf")
+flip_v = true
+
+[node name="Background5" type="Sprite2D" parent="BgPics"]
+z_index = -2
+position = Vector2(960, 1973.8)
+scale = Vector2(1.4, 1.4)
+texture = ExtResource("4_3afkf")
+flip_v = true
+
+[node name="Background6" type="Sprite2D" parent="BgPics"]
+z_index = -2
+position = Vector2(-1515, 1973.8)
+scale = Vector2(1.4, 1.4)
+texture = ExtResource("4_3afkf")
+flip_v = true
+
+[node name="Background7" type="Sprite2D" parent="BgPics"]
+z_index = -2
+position = Vector2(3437, 1973.8)
+scale = Vector2(1.4, 1.4)
+texture = ExtResource("4_3afkf")
+flip_v = true
+
+[node name="Background8" type="Sprite2D" parent="BgPics"]
+z_index = -2
+position = Vector2(960, -886.2)
+scale = Vector2(1.4, 1.4)
+texture = ExtResource("4_3afkf")
+flip_v = true
+
+[node name="Background9" type="Sprite2D" parent="BgPics"]
+z_index = -2
+position = Vector2(-1515, -886.2)
+scale = Vector2(1.4, 1.4)
+texture = ExtResource("4_3afkf")
+flip_v = true
 
 [connection signal="timeout" from="Iterator" to="." method="_on_iterator_timeout"]

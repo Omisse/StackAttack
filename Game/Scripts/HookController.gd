@@ -11,7 +11,7 @@ signal round_done(hookAmount: int)
 @export_category("One hook settings")
 @export var items: Array[ItemResource] ##array of items for dropping
 @export var hookMoveSpeed: float = 300 ##movespeed for a newly instantiated hook on 1.00x speed
-@export var hookGridOffset:= Vector2i(0,-1) ##offset for all hooks in grid coordinates
+@export var hookGridOffset:= Vector2i(0,0) ##offset for all hooks in grid coordinates
 @export var hookScene = preload("res://Game/Scenes/Hook.tscn")
 
 var levelController:LevelController
@@ -43,12 +43,17 @@ func items_init():
 
 func positions_init():
 	hooksMax = levelController.fieldSize.x-1
-	var height = levelController.gridHelper.gridToWorld(hookGridOffset).y
-	borderPositions.append(levelController.gridHelper.gridToWorld(hookGridOffset+Vector2i(-1, 0)))
-	borderPositions.append(levelController.gridHelper.gridToWorld(hookGridOffset+Vector2i(levelController.fieldSize.x,0)))
-	for point in levelController.fieldSize.x:
-		positions.append(levelController.gridHelper.gridToWorld(Vector2i(point, hookGridOffset.y)))
+	var height: float = levelController.grid.map_to_local(Vector2i(0,levelController.gameFieldStart.y+hookGridOffset.y)).y
+	borderPositions.append(Vector2(levelController.grid.map_to_local(Vector2i(levelController.gameFieldStart.x-2, 0)).x, height))
+	borderPositions.append(Vector2(levelController.grid.map_to_local(Vector2i(levelController.gameFieldEnd.x+2, 0)).x, height))
+	var grid_ceilingPositions = levelController.grid.get_used_cells(1)
+	grid_ceilingPositions = grid_ceilingPositions.filter(ceiling_filter)
+	for pos in grid_ceilingPositions:
+		positions.append(levelController.grid.map_to_local(pos))
 	freePositions = positions.duplicate()
+
+func ceiling_filter(pos: Vector2i):
+	return (pos.y == levelController.gameFieldStart.y-1 and pos.x >= levelController.gameFieldStart.x and pos.x <= levelController.gameFieldEnd.x)
 
 
 func events_init():

@@ -20,7 +20,7 @@ var endPosition: Vector2
 
 func _ready():
 	itemSprite.texture = load(item.texturePath)
-	scale *= levelController.gridHelper.cellScale
+	scale *= levelController.grid.tile_set.tile_size.x/128
 	position = startPosition
 	field_left.connect(destroy)
 
@@ -43,7 +43,7 @@ func _process(delta: float) -> void:
 	if not done and endSign != moveSign:
 		done = true
 		field_left.emit()
-	if not moved and absf(position.x-startPosition.x) >= levelController.gridHelper.cellSize.x:
+	if not moved and absf(position.x-startPosition.x) >= levelController.grid.tile_set.tile_size.x:
 		moved = true
 		field_entered.emit()
 
@@ -53,7 +53,7 @@ func drop_item():
 	var itemNode = load(item.scenePath).instantiate()
 	itemNode.levelController = levelController
 	itemNode.position = dropPosition
-	itemNode.scale *= levelController.gridHelper.cellScale
+	itemNode.scale *= levelController.grid.tile_set.tile_size.x/128
 	levelController.add_child(itemNode)
 
 func destroy():

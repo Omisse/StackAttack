@@ -34,12 +34,6 @@ func _on_lose():
 	Audio.stop_all_but_bg()
 	if Yandex.current_fullscreen_ad_name != "":
 		await Yandex._showFullscreenAdv
-	
-	Yandex.getLeaderboards()
-	Yandex.getLeaderboardPlayerEntry('leaderboard')
-	await Yandex._getLeaderboardPlayerEntry_then or Yandex._getLeaderboardPlayerEntry_catch
-	
-	
 
 func _on_retry_pressed():
 	get_tree().paused = false

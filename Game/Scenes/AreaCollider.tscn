@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3 uid="uid://ong6povdoglm"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_daqtt"]
+size = Vector2(128, 128)
+
+[node name="AreaCollider" type="Area2D"]
+monitoring = false
+metadata/Collider = NodePath("CollisionShape2D")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_daqtt")

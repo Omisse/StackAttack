@@ -1,0 +1,35 @@
+[gd_resource type="TileSet" load_steps=4 format=3 uid="uid://csfln3xor378w"]
+
+[ext_resource type="Texture2D" uid="uid://b1ar4qkoqcbt7" path="res://Game/Sprites/EnvironmentTiles.png" id="1_exc65"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_611nn"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_mbxpf"]
+texture = ExtResource("1_exc65")
+texture_region_size = Vector2i(128, 128)
+2:0/0 = 0
+2:0/0/physics_layer_0/linear_velocity = Vector2(0, 0)
+2:0/0/physics_layer_0/angular_velocity = 0.0
+2:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-64, -64, 64, -64, 64, 64, -64, 64)
+1:1/0 = 0
+1:1/0/physics_layer_0/linear_velocity = Vector2(0, 0)
+1:1/0/physics_layer_0/angular_velocity = 0.0
+1:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-64, -64, 64, -64, 64, 64, -64, 64)
+1:0/0 = 0
+1:0/0/physics_layer_0/linear_velocity = Vector2(0, 0)
+1:0/0/physics_layer_0/angular_velocity = 0.0
+1:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-64, -64, 64, -64, 64, 64, -64, 64)
+0:0/0 = 0
+0:0/0/physics_layer_0/linear_velocity = Vector2(0, 0)
+0:0/0/physics_layer_0/angular_velocity = 0.0
+0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-64, -64, 64, -64, 64, 64, -64, 64)
+0:1/0 = 0
+0:1/0/physics_layer_0/linear_velocity = Vector2(0, 0)
+0:1/0/physics_layer_0/angular_velocity = 0.0
+0:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-64, -64, 64, -64, 64, 64, -64, 64)
+
+[resource]
+tile_size = Vector2i(128, 128)
+physics_layer_0/collision_layer = 3
+physics_layer_0/physics_material = SubResource("PhysicsMaterial_611nn")
+sources/1 = SubResource("TileSetAtlasSource_mbxpf")

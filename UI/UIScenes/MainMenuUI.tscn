@@ -18,7 +18,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("1_ictad")
 script = ExtResource("2_g6k5l")
-playScenePath = "res://Game/Scenes/Level.tscn"
+playScenePath = "res://Game/Scenes/Game.tscn"
 
 [node name="TextureRect" type="TextureRect" parent="."]
 modulate = Color(0.450648, 0.450648, 0.450648, 1)
