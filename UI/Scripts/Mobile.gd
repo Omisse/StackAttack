@@ -45,37 +45,3 @@ func _process(delta: float) -> void:
 				player.mobileH = 1
 			else:
 				player.mobileH = 0
-
-"""
-func _ready() -> void:
-	leftButton.button_down.connect(_on_lb_down)
-	leftButton.button_down.connect(_on_any_down)
-	rightButton.button_down.connect(_on_rb_down)
-	rightButton.button_down.connect(_on_any_down)
-	leftButton.button_up.connect(_on_lb_up)
-	rightButton.button_up.connect(_on_rb_up)
-	
-func _on_any_down():
-	if leftDown and rightDown:
-		player.mobileV = true
-	else:
-		player.mobileV = false
-
-func _on_lb_down():
-	player.mobileH-=1
-	player.mobileH = roundf(player.mobileH)
-
-
-func _on_rb_down():
-	player.mobileH+=1
-	player.mobileH = roundf(player.mobileH)
-
-
-func _on_lb_up():
-	player.mobileH+=1
-	player.mobileH = roundf(player.mobileH)
-
-func _on_rb_up():
-	player.mobileH-=1
-	player.mobileH = roundf(player.mobileH)
-"""
