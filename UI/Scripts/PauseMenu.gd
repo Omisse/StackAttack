@@ -5,6 +5,7 @@ class_name PauseUI
 signal update_language(newLanguage: String)
 signal update_sound(value: float)
 signal exit_pressed
+signal resume_pressed
 
 @export var levelController: LevelController
 

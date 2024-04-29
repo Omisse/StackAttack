@@ -10,6 +10,7 @@
 
 [node name="MainMenuUI" type="Control"]
 process_mode = 3
+z_index = 21
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -32,25 +33,27 @@ texture = ExtResource("3_3oyhc")
 expand_mode = 2
 flip_h = true
 
-[node name="MarginContainer" type="MarginContainer" parent="."]
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 256.0
-offset_right = -255.0
-offset_bottom = -492.0
 grow_horizontal = 2
 grow_vertical = 2
+alignment = 1
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
-layout_mode = 2
-theme_override_constants/separation = -335
-
-[node name="Title" type="Label" parent="MarginContainer/VBoxContainer"]
-auto_translate_mode = 1
+[node name="AspectRatioContainer" type="AspectRatioContainer" parent="VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
+
+[node name="TitleContainer" type="VBoxContainer" parent="VBoxContainer/AspectRatioContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="Title" type="Label" parent="VBoxContainer/AspectRatioContainer/TitleContainer"]
+auto_translate_mode = 1
+layout_mode = 2
+size_flags_vertical = 1
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 16
 theme_override_fonts/font = ExtResource("1_i8ji6")
@@ -59,10 +62,10 @@ text = "TITLE"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Subtitle" type="Label" parent="MarginContainer/VBoxContainer"]
+[node name="Subtitle" type="Label" parent="VBoxContainer/AspectRatioContainer/TitleContainer"]
 auto_translate_mode = 1
 layout_mode = 2
-size_flags_vertical = 3
+size_flags_vertical = 1
 size_flags_stretch_ratio = 0.5
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 8
@@ -71,79 +74,119 @@ text = "SUBTITLE"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="MenuMargin" type="MarginContainer" parent="."]
-auto_translate_mode = 1
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 514.0
-offset_top = 530.0
-offset_right = -534.0
-offset_bottom = -109.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/margin_left = 128
-theme_override_constants/margin_top = 64
-theme_override_constants/margin_right = 128
-theme_override_constants/margin_bottom = 64
-
-[node name="MenuLayoutContainer" type="VBoxContainer" parent="MenuMargin"]
-auto_translate_mode = 1
-layout_mode = 2
-theme_override_constants/separation = 12
-
-[node name="AspectRatioContainer" type="AspectRatioContainer" parent="MenuMargin/MenuLayoutContainer"]
-layout_mode = 2
-size_flags_vertical = 3
-ratio = 4.5664
-
-[node name="PlayButton" type="Button" parent="MenuMargin/MenuLayoutContainer/AspectRatioContainer"]
+[node name="MenuLayoutContainer" type="VBoxContainer" parent="VBoxContainer"]
 auto_translate_mode = 1
 layout_mode = 2
 size_flags_vertical = 3
+alignment = 1
+
+[node name="AspectRatioContainer3" type="AspectRatioContainer" parent="VBoxContainer/MenuLayoutContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+ratio = 1.5
+
+[node name="AspectRatioContainer" type="AspectRatioContainer" parent="VBoxContainer/MenuLayoutContainer/AspectRatioContainer3"]
+layout_mode = 2
+size_flags_vertical = 3
+ratio = 3.0
+
+[node name="PlayButton" type="Button" parent="VBoxContainer/MenuLayoutContainer/AspectRatioContainer3/AspectRatioContainer"]
+unique_name_in_owner = true
+auto_translate_mode = 1
+layout_mode = 2
+size_flags_vertical = 3
+focus_neighbor_left = NodePath("../../../AspectRatioContainer2/AspectRatioContainer/SettingsContainer/AspectRatioContainer/LanguageButton")
+focus_neighbor_right = NodePath("../../../AspectRatioContainer2/AspectRatioContainer/SettingsContainer/AspectRatioContainer2/SoundContainer/AspectRatioContainer/Volume")
+focus_neighbor_bottom = NodePath("../../../AspectRatioContainer2/AspectRatioContainer/SettingsContainer/AspectRatioContainer/LanguageButton")
+focus_next = NodePath("../../../AspectRatioContainer2/AspectRatioContainer/SettingsContainer/AspectRatioContainer/LanguageButton")
 text = "PLAY"
 clip_text = true
 
-[node name="SettingsContainer" type="HBoxContainer" parent="MenuMargin/MenuLayoutContainer"]
-auto_translate_mode = 1
+[node name="AspectRatioContainer2" type="AspectRatioContainer" parent="VBoxContainer/MenuLayoutContainer"]
 layout_mode = 2
-size_flags_vertical = 4
-theme_override_constants/separation = 32
+size_flags_vertical = 3
+ratio = 1.5
+alignment_vertical = 0
 
-[node name="LanguageButton" type="Button" parent="MenuMargin/MenuLayoutContainer/SettingsContainer"]
-auto_translate_mode = 1
-custom_minimum_size = Vector2(64, 64)
+[node name="AspectRatioContainer" type="AspectRatioContainer" parent="VBoxContainer/MenuLayoutContainer/AspectRatioContainer2"]
 layout_mode = 2
-size_flags_horizontal = 0
-size_flags_vertical = 4
-theme_override_font_sizes/font_size = 26
+ratio = 3.0
+alignment_vertical = 0
+
+[node name="SettingsContainer" type="HBoxContainer" parent="VBoxContainer/MenuLayoutContainer/AspectRatioContainer2/AspectRatioContainer"]
+auto_translate_mode = 1
+layout_mode = 2
+theme_override_constants/separation = 32
+alignment = 1
+
+[node name="AspectRatioContainer" type="AspectRatioContainer" parent="VBoxContainer/MenuLayoutContainer/AspectRatioContainer2/AspectRatioContainer/SettingsContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="LanguageButton" type="Button" parent="VBoxContainer/MenuLayoutContainer/AspectRatioContainer2/AspectRatioContainer/SettingsContainer/AspectRatioContainer"]
+unique_name_in_owner = true
+auto_translate_mode = 1
+layout_mode = 2
+size_flags_horizontal = 3
+focus_neighbor_left = NodePath("../../../../../AspectRatioContainer3/AspectRatioContainer/PlayButton")
+focus_neighbor_top = NodePath("../../../../../AspectRatioContainer3/AspectRatioContainer/PlayButton")
+focus_neighbor_right = NodePath("../../AspectRatioContainer2/SoundContainer/MuteButton")
+focus_neighbor_bottom = NodePath("../../../../../AspectRatioContainer3/AspectRatioContainer/PlayButton")
+focus_next = NodePath("../../AspectRatioContainer2/SoundContainer/MuteButton")
+focus_previous = NodePath("../../../../../AspectRatioContainer3/AspectRatioContainer/PlayButton")
 icon = ExtResource("2_gvno1")
 clip_text = true
 icon_alignment = 1
 expand_icon = true
 
-[node name="SoundContainer" type="HBoxContainer" parent="MenuMargin/MenuLayoutContainer/SettingsContainer"]
+[node name="AspectRatioContainer2" type="AspectRatioContainer" parent="VBoxContainer/MenuLayoutContainer/AspectRatioContainer2/AspectRatioContainer/SettingsContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 4.0
+ratio = 3.0
+
+[node name="SoundContainer" type="HBoxContainer" parent="VBoxContainer/MenuLayoutContainer/AspectRatioContainer2/AspectRatioContainer/SettingsContainer/AspectRatioContainer2"]
 auto_translate_mode = 1
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-theme_override_constants/separation = 4
+alignment = 1
 
-[node name="MuteButton" type="TextureButton" parent="MenuMargin/MenuLayoutContainer/SettingsContainer/SoundContainer"]
+[node name="MuteButton" type="TextureButton" parent="VBoxContainer/MenuLayoutContainer/AspectRatioContainer2/AspectRatioContainer/SettingsContainer/AspectRatioContainer2/SoundContainer"]
+unique_name_in_owner = true
 auto_translate_mode = 1
 layout_mode = 2
-size_flags_vertical = 4
+size_flags_horizontal = 3
+focus_neighbor_left = NodePath("../../../AspectRatioContainer/LanguageButton")
+focus_neighbor_top = NodePath("../../../../../../AspectRatioContainer3/AspectRatioContainer/PlayButton")
+focus_neighbor_right = NodePath("../AspectRatioContainer/Volume")
+focus_neighbor_bottom = NodePath("../../../../../../AspectRatioContainer3/AspectRatioContainer/PlayButton")
+focus_next = NodePath("../AspectRatioContainer/Volume")
+focus_previous = NodePath("../../../AspectRatioContainer/LanguageButton")
 toggle_mode = true
 button_pressed = true
 texture_normal = ExtResource("3_0in30")
 texture_pressed = ExtResource("4_bwsqv")
+stretch_mode = 5
 
-[node name="Volume" type="HSlider" parent="MenuMargin/MenuLayoutContainer/SettingsContainer/SoundContainer"]
-auto_translate_mode = 1
+[node name="AspectRatioContainer" type="AspectRatioContainer" parent="VBoxContainer/MenuLayoutContainer/AspectRatioContainer2/AspectRatioContainer/SettingsContainer/AspectRatioContainer2/SoundContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-size_flags_vertical = 4
+size_flags_stretch_ratio = 4.0
+stretch_mode = 3
+
+[node name="Volume" type="HSlider" parent="VBoxContainer/MenuLayoutContainer/AspectRatioContainer2/AspectRatioContainer/SettingsContainer/AspectRatioContainer2/SoundContainer/AspectRatioContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+size_flags_stretch_ratio = 4.0
+focus_neighbor_left = NodePath("../../MuteButton")
+focus_neighbor_top = NodePath("../../../../../../../AspectRatioContainer3/AspectRatioContainer/PlayButton")
+focus_neighbor_right = NodePath("../../MuteButton")
+focus_neighbor_bottom = NodePath("../../../../../../../AspectRatioContainer3/AspectRatioContainer/PlayButton")
+focus_next = NodePath("../../../../../../../AspectRatioContainer3/AspectRatioContainer/PlayButton")
+focus_previous = NodePath("../../MuteButton")
 max_value = 2.0
 step = 0.05
 value = 1.0

@@ -17,8 +17,7 @@ events = [SubResource("InputEventKey_u70i8")]
 [node name="PauseMenu" type="Control"]
 process_mode = 3
 process_priority = -5
-top_level = true
-z_index = 5
+z_index = 21
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -27,7 +26,6 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-mouse_filter = 1
 theme = ExtResource("3_q34cj")
 script = ExtResource("2_2xmx7")
 

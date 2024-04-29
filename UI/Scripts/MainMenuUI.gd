@@ -7,10 +7,10 @@ signal update_sound(newVolumeLinear: float)
 
 @export var playScenePath: String
 
-@onready var playButton: Button = $MenuMargin/MenuLayoutContainer/AspectRatioContainer/PlayButton
-@onready var languageButton: Button = $MenuMargin/MenuLayoutContainer/SettingsContainer/LanguageButton
-@onready var soundToggler: TextureButton = $MenuMargin/MenuLayoutContainer/SettingsContainer/SoundContainer/MuteButton
-@onready var soundSlider: Slider = $MenuMargin/MenuLayoutContainer/SettingsContainer/SoundContainer/Volume
+@onready var playButton: Button = %PlayButton
+@onready var languageButton: Button = %LanguageButton
+@onready var soundToggler: TextureButton = %MuteButton
+@onready var soundSlider: Slider = %Volume
 
 func _ready() -> void:
 	soundSlider.value = Audio.masterVolume
@@ -25,10 +25,10 @@ func _ready() -> void:
 	update_sound.connect(Audio._on_volume_changed)
 	
 	playButton.grab_focus()
-	
-	Yandex.initGame()
-	await Yandex._initGame
-	Yandex.on_ready()
+	if !Yandex.is_initGame:
+		Yandex.initGame()
+		await Yandex._initGame
+		Yandex.on_ready()
 	
 	if !ScoreStorage.isInitialised:
 		ScoreStorage.initPlayerScore()

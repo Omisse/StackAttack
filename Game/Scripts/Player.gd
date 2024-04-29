@@ -20,6 +20,8 @@ var was_on_floor: bool
 @onready var landingSound: AudioStreamPlayer = $"/root/Audio/Landing"
 @onready var walkingSound: AudioStreamPlayer = $"/root/Audio/Walking"
 
+var mobileH: float = 0
+var mobileV: bool = false
 
 func _ready() -> void:
 	health = healthPoints
@@ -33,12 +35,14 @@ func _process(delta: float) -> void:
 		if not was_on_floor:
 			Audio.play_sound(landingSound)
 	
-	if Input.is_action_just_pressed("Jump") and is_on_floor():
+	if (mobileV or Input.is_action_just_pressed("Jump")) and is_on_floor():
 		Audio.play_sound(jumpSound)
 		velocity.y = jumpVelocity * levelScale
 		
 	##horizontal movement
-	var direction := Input.get_axis("MoveLeft", "MoveRight")
+	var direction = mobileH
+	if !direction:
+		direction = Input.get_axis("MoveLeft", "MoveRight")
 	if direction:
 		if is_on_floor():
 			if !walkingSound.playing:

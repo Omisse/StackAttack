@@ -11,7 +11,7 @@ signal scoreChanged(score: int, multiplier: float)
 @onready var healthNode: HealthUI = %HealthUI
 @onready var scoreNode: ScoreUI = %ScoreUI
 @onready var pauseButton: Button = %MenuButton
-
+@onready var mobileInputs = %MobileMovement
 
 func _ready() -> void:
 	if levelController != null:
@@ -39,3 +39,4 @@ func _on_score_changed(score: int, multiplier: float):
 func _on_restart():
 	_on_player_hit(2)
 	_on_score_changed(0,levelController.defaultSpeed)
+

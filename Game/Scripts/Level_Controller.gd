@@ -29,7 +29,7 @@ signal score_changed(newScore: int, multiplier: float)
 
 
 @onready var loseSound: AudioStreamPlayer = $"/root/Audio/Lose"
-@onready var grid = $TileMap as TileMap
+@onready var grid = %TileMap as TileMap
 @onready var iterator = $Iterator
 
 var speed: float
@@ -38,6 +38,7 @@ var fieldSize: Vector2i
 var playerHealth:= 2
 var score:int = 0
 var ownUINodes: Array[Node]
+var mobilePlayer: CharacterBody2D
 
 func _enter_tree() -> void:
 	speed = defaultSpeed
@@ -45,13 +46,14 @@ func _enter_tree() -> void:
 
 func _ready() -> void:
 	iterator.timeout.connect(_on_iterator_timeout)
-	await bootstrap()
 	fieldSize.x = gameFieldEnd.x - gameFieldStart.x + 1
 	fieldSize.y = gameFieldEnd.y - gameFieldStart.y + 1
+	await bootstrap()
 	score_changed.emit(score, speed)
 
 func _physics_process(delta: float) -> void:
-	position = $ColorRect.position
+	position.x = get_viewport_rect().size.x/2-ProjectSettings.get_setting("display/window/size/viewport_width")/2
+	position.y = get_viewport_rect().size.y/2-ProjectSettings.get_setting("display/window/size/viewport_height")/2
 	if lineCount >= fieldSize.x:
 		line_filled.emit()
 		lineCount -= fieldSize.x
@@ -64,10 +66,9 @@ func _on_iterator_timeout() -> void:
 
 func bootstrap():
 	gridAreaCreate()
-	playerBootstrap()
-	hookControllerBootstrap()
-	uiBootstrap()
-	audioBootstrap()
+	await playerBootstrap()
+	await hookControllerBootstrap()
+	await uiBootstrap()
 
 
 func gridAreaCreate():
@@ -82,15 +83,18 @@ func gridAreaCreate():
 		
 
 
-func audioBootstrap():
-	score_changed.connect(Audio._on_score_changed)
-
-
 func uiBootstrap():
 	var ingameUI = ingameUIScene.instantiate()
 	for childNode in ingameUI.get_children():
 		childNode.levelController = self
 		childNode.request_ready()
+	var mobileHandlerNode = ingameUI.find_child("MobileMovement")
+	if mobileHandlerNode != null and mobilePlayer != null:
+		mobileHandlerNode.player = mobilePlayer
+	else:
+		push_error("Mobile is not connected to the player")
+		push_error("Mobile = ", mobileHandlerNode)
+		push_error("Player = ", mobilePlayer)
 	add_child.call_deferred(ingameUI)
 	await ingameUI.ready
 
@@ -110,8 +114,9 @@ func playerBootstrap():
 	player.position = grid.map_to_local(grid_playerPos)
 	if player.has_signal("hit"):
 		player.hit.connect(_on_player_hit)
-	add_child(player)
+	add_child.call_deferred(player)
 	await player.ready
+	mobilePlayer = player
 
 
 func lose():
