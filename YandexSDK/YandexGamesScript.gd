@@ -167,7 +167,7 @@ func showFullscreenAdv(ad_name:String):
 	js_dictionary["callbacks"] = js_dictionary_2
 	if _print_debug: js_console.log(js_dictionary)
 	current_fullscreen_ad_name = ad_name
-	now_fullscreen = true	
+	now_fullscreen = true
 	js_ysdk.adv.showFullscreenAdv(js_dictionary)
 
 

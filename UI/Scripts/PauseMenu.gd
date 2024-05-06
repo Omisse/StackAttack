@@ -31,6 +31,11 @@ func _ready() -> void:
 	update_sound.connect(Audio._on_volume_changed)
 
 
+func _notification(what: int) -> void:
+	if what == Viewport.NOTIFICATION_APPLICATION_FOCUS_OUT and !visible:
+		_on_resume_pressed()
+
+
 func _on_resume_pressed():
 	visible = !visible
 	get_tree().paused = visible

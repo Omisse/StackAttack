@@ -9,7 +9,23 @@ var currentMultiplier = 1
 
 func _ready() -> void:
 	_on_volume_changed(masterVolume)
-	
+	#get_window().focus_exited.connect(_on_lose_focus)
+	#get_window().focus_entered.connect(_on_focus)
+
+
+func _notification(what: int) -> void:
+	if what == Viewport.NOTIFICATION_WM_WINDOW_FOCUS_IN:
+		_on_focus()
+	elif what == Viewport.NOTIFICATION_WM_WINDOW_FOCUS_OUT:
+		_on_lose_focus()
+
+func _on_lose_focus():
+	pause_all()
+
+func _on_focus():
+	resume_all()
+
+
 func _on_volume_changed(volume: float):
 	masterVolume = volume
 	AudioServer.set_bus_volume_db(0, linear_to_db(masterVolume))
