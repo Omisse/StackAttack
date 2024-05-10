@@ -25,14 +25,14 @@ func _ready() -> void:
 	update_sound.connect(Audio._on_volume_changed)
 	
 	playButton.grab_focus()
-	if !Yandex.is_initGame:
+	
+	if !Yandex.is_initGame and Yandex.js_console != null:
 		Yandex.initGame()
 		await Yandex._initGame
 		Yandex.on_ready()
 	
 	if !ScoreStorage.isInitialised:
-		ScoreStorage.initPlayerScore()
-		await ScoreStorage.gotPlayerEntryCallback
+		await ScoreStorage.initPlayerScore()
 
 
 func _on_play_pressed():

@@ -12,8 +12,6 @@ config_version=5
 
 config/name="StackAttack"
 run/main_scene="res://UI/UIScenes/MainMenuUI.tscn"
-run/disable_stdout=true
-run/disable_stderr=true
 config/features=PackedStringArray("4.3", "GL Compatibility")
 
 [audio]
@@ -27,19 +25,24 @@ driver/output_latency.web=100
 Audio="*res://Audio/Audio.tscn"
 Yandex="*res://YandexSDK/YandexGamesScript.gd"
 ScoreStorage="*res://YandexSDK/SDKVars.gd"
-
-[debug]
-
-settings/stdout/print_fps=true
-settings/stdout/verbose_stdout=true
+SavedData="*res://Game/Scripts/Data.gd"
 
 [display]
 
 window/size/viewport_width=1920
 window/size/viewport_height=1080
-window/size/mode=2
-window/stretch/mode="viewport"
+window/size/window_width_override=1280
+window/size/window_height_override=720
+window/subwindows/embed_subwindows=false
+window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
+window/dpi/allow_hidpi=false
+window/handheld/orientation=4
+
+[gui]
+
+theme/default_font_multichannel_signed_distance_field=true
+theme/default_font_generate_mipmaps=true
 
 [input]
 
@@ -98,6 +101,9 @@ limits/debugger/max_chars_per_second=3000000
 
 [rendering]
 
+textures/canvas_textures/default_texture_filter=0
 renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
 textures/vram_compression/import_etc2_astc=true
+environment/ssao/quality=0
+environment/ssil/quality=0

@@ -160,8 +160,6 @@ func showFullscreenAdv(ad_name:String):
 	var js_dictionary_2:JavaScriptObject = null
 	js_dictionary = JavaScriptBridge.create_object("Object")
 	js_dictionary_2 = JavaScriptBridge.create_object("Object")
-	#js_callback_showFullscreenAdv_onClose = JavaScriptBridge.create_callback(_callback_fullscreenAdv_close)
-	#js_callback_showFullscreenAdv_onError = JavaScriptBridge.create_callback(_callback_fullscreenAdv_error)
 	js_dictionary_2["onClose"] = js_callback_showFullscreenAdv_onClose
 	js_dictionary_2["onError"] = js_callback_showFullscreenAdv_onError
 	js_dictionary["callbacks"] = js_dictionary_2
@@ -468,6 +466,7 @@ func js_LeaderboardPlayerEntry_to_Dictionary(object:JavaScriptObject) -> Diction
 func getLeaderboardPlayerEntry(leaderboardName:String):
 	if js_ysdk_lb == null:
 		if _print_debug: print("%s getLeaderboardDescription(leaderboardName:%s) js_ysdk_lb == null"%[_print, leaderboardName])
+		_getLeaderboardPlayerEntry_catch.emit("err")
 		return
 	_current_isAvailableMethod = 'leaderboards.getLeaderboardPlayerEntry'
 	js_ysdk.isAvailableMethod('leaderboards.getLeaderboardPlayerEntry').then(js_callback_isAvailableMethod)
