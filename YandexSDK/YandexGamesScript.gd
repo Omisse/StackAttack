@@ -80,7 +80,7 @@ var js_callback_isAvailableMethod = JavaScriptBridge.create_callback(_callback_i
 #endregion
 #region public variables
 const _print:String = "Addon:YandexGamesSDK, YandexGames.gd"
-var _print_debug:bool = true
+var _print_debug:bool = false
 
 var now_fullscreen:bool = false
 var now_rewarded:bool = false

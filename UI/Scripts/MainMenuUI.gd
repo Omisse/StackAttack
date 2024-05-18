@@ -40,9 +40,12 @@ func _ready() -> void:
 
 func _ad_coroutine():
 	menuLayout.visible = false
-	Audio.stop_all_but_bg()
+	Audio.pause_all()
 	await Yandex.showFullscreenAdv("fullscreenAdv_menu")
 	menuLayout.visible = true
+	if Yandex.now_fullscreen:
+		await Yandex._showFullscreenAdv
+	Audio.resume_all()
 
 
 func _on_play_pressed():

@@ -31,8 +31,11 @@ func _ad_coroutine():
 	retryButton.visible = false
 	if levelController.loseSound.playing:
 		await levelController.loseSound.finished
-	Audio.stop_all_but_bg()
+	Audio.pause_all()
 	await Yandex.showFullscreenAdv("fullscreenAdv_on_lose")
+	if Yandex.now_fullscreen:
+		await Yandex._showFullscreenAdv
+	Audio.resume_all()
 	retryButton.visible = true
 	retryButton.grab_focus()
 
