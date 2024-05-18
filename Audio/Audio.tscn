@@ -9,7 +9,7 @@
 [ext_resource type="AudioStream" uid="uid://c5awvbgj4d1td" path="res://Audio/Sounds/explosion.wav" id="7_rorlg"]
 [ext_resource type="AudioStream" uid="uid://b2uvffm13enje" path="res://Audio/Sounds/jump.ogg" id="8_ml57q"]
 [ext_resource type="AudioStream" uid="uid://cslvv5uqpkb4p" path="res://Audio/Sounds/landing.ogg" id="9_gslrl"]
-[ext_resource type="AudioStream" uid="uid://2tot31d5w2ea" path="res://Audio/Sounds/lose.wav" id="10_dm4j3"]
+[ext_resource type="AudioStream" uid="uid://bni074m1afxx7" path="res://Audio/Sounds/lose2.wav" id="10_grbkw"]
 [ext_resource type="AudioStream" uid="uid://83ubu6k4let1" path="res://Audio/Sounds/steps.ogg" id="11_yy7l7"]
 
 [node name="Audio" type="Node"]
@@ -59,7 +59,7 @@ volume_db = -15.0
 bus = &"Player"
 
 [node name="Lose" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("10_dm4j3")
+stream = ExtResource("10_grbkw")
 volume_db = -35.0
 bus = &"Level"
 

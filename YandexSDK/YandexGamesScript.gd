@@ -156,6 +156,9 @@ func _callback_init(args):
 # https://yandex.ru/dev/games/doc/en/sdk/sdk-adv
 #region showFullscreenAdv()
 func showFullscreenAdv(ad_name:String):
+	if is_initGame == false: 
+		_showFullscreenAdv.emit(false, ad_name)
+		return
 	var js_dictionary:JavaScriptObject = null
 	var js_dictionary_2:JavaScriptObject = null
 	js_dictionary = JavaScriptBridge.create_object("Object")
@@ -435,7 +438,7 @@ func setLeaderboardScore(leaderboardName:String, score:int):
 	js_ysdk.isAvailableMethod('leaderboards.setLeaderboardScore').then(js_callback_isAvailableMethod)
 	await _isAvailableMethod
 	if _current_isAvailableMethod_result == true:
-		js_ysdk_lb.setLeaderboardScore(leaderboardName, score)
+		js_ysdk_lb.setLeaderboardScore(leaderboardName, JavaScriptBridge.eval('%s'%[score]))
 		if _print_debug: print("%s setLeaderboardScore() js_ysdk_lb.setLeaderboardScore(leaderboardName:%s, score:%s) request"%[_print, leaderboardName, score])
 	elif _print_debug: print("%s setLeaderboardScore() js_ysdk_lb.setLeaderboardScore(leaderboardName:%s, score:%s) isAvailableMethod('leaderboards.setLeaderboardScore') == false"%[_print, leaderboardName, score])
 

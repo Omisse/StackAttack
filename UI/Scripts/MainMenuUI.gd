@@ -11,6 +11,7 @@ signal update_sound(newVolumeLinear: float)
 @onready var languageButton: Button = %LanguageButton
 @onready var soundToggler: TextureButton = %MuteButton
 @onready var soundSlider: Slider = %Volume
+@onready var menuLayout: VBoxContainer = %MenuLayoutContainer
 
 func _ready() -> void:
 	soundSlider.value = Audio.masterVolume
@@ -31,8 +32,17 @@ func _ready() -> void:
 		await Yandex._initGame
 		Yandex.on_ready()
 	
+	await _ad_coroutine()
+	
 	if !ScoreStorage.isInitialised:
 		await ScoreStorage.initPlayerScore()
+
+
+func _ad_coroutine():
+	menuLayout.visible = false
+	Audio.stop_all_but_bg()
+	await Yandex.showFullscreenAdv("fullscreenAdv_menu")
+	menuLayout.visible = true
 
 
 func _on_play_pressed():
